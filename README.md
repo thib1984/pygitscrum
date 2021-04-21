@@ -17,6 +17,12 @@ With pygitscrum you can masterize few git actions.
 
 *_Use pip instead of pip3, if pip3 does not exist_
 
+## Upgrade
+
+``pip3 install --upgrade pygitscrum``*
+
+*_Use pip instead of pip3, if pip3 does not exist_
+
 ## Use
 
 Just :
