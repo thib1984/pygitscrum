@@ -8,6 +8,7 @@ import glob
 import os
 from termcolor import colored
 import sys
+import pkg_resources
 
 
 def pygitscrum():
@@ -24,8 +25,8 @@ def pygitscrum():
     # rechercher repos git
     directory = "."
     pathname = directory + "/**/.git"
-
     files = glob.glob(pathname, recursive=True)
+    files.sort()
     # print(files)
 
     if len(sys.argv) < 2 or (sys.argv[1] == "--help"):
@@ -39,11 +40,13 @@ def pygitscrum():
 
         USAGE: pygitscrum [OPTION] [PARAMETER]
 
-            --check :   check your repos one by one, fetch them, and ask you if a pull/push is available
+            --check     : check your repos one by one, fetch them, and ask you if a pull/push is available
                         you can also pull/push or check the differences
-            --daily :   check your repos one by one, and print the recents commits since yesterday
-            --search:   check in all repos and print the logs with the key word in parameter
-            --help  :   display this help message
+            --daily     : check your repos one by one, and print the recents commits since yesterday
+            --search    : check in all repos and print the logs with the key word in parameter
+            --help      : display this help message
+            --update    : update this programm
+            --version   : display the version
 
         Full documentation at: <https://github.com/thib1984/ytdlmusic>
         Report bugs to <https://github.com/thib1984/ytdlmusic/issues>
@@ -55,6 +58,23 @@ def pygitscrum():
 
         Written by thib1984."""
         )
+    elif sys.argv[1] == "--version":
+        print(
+            "version pygitscrum : "
+            + pkg_resources.get_distribution("pygitscrum").version
+        )
+    elif sys.argv[1] == "--update":
+        prog = "pip3"
+        if (which("pip3")) is None:
+            prog = "pip"
+        params = [
+            prog,
+            "install",
+            "--upgrade",
+            "pygitscrum",
+        ]
+        subprocess.check_call(params)
+
     elif sys.argv[1] == "--check":
         files_to_work = []
         # boucler repos git
@@ -66,19 +86,22 @@ def pygitscrum():
         for repo in files:
             print(colored(repo, "blue"))
 
-            command_git_check(repo, ["remote", "update"])
-            command_git_check(repo, ["fetch"])
+            # quelle difference?
+            # comment forcer la récuperation des branches distantes?
+            command_git_check_en(repo, ["remote", "update"])
+            command_git_check_en(repo, ["fetch", "--all"])
             while (
                 not "Your branch is up to date"
-                in command_git_check(repo, ["status"])
+                in command_git_check_en(repo, ["status"])
             ):
                 print(
                     colored(
-                        command_git_check(repo, ["status"]), "yellow"
+                        command_git_check_en(repo, ["status"]),
+                        "yellow",
                     )
                 )
                 answer = input(
-                    "p(ull)/P(ush)/s(how)/S(how all)/q(uit) ?"
+                    "p(ull)/P(ush)/s(how)/S(how all)/q(uit)? "
                 )
                 if answer == "p":
                     command_git_call(repo, ["pull"])
@@ -133,8 +156,10 @@ def pygitscrum():
                     "--no-pager",
                     "log",
                     "--since=yesterday",
+                    # ou --all?
+                    "--branches=*",
                     "--author=" + me.rstrip(),
-                    "--format=%ad - %h - %S --- %C(yellow)%C(reset) %w(80,0,2)%s",
+                    "--format=%ad - %h --- %s",
                     "--date-order",
                     "--date=short",
                     "--reverse",
@@ -147,7 +172,7 @@ def pygitscrum():
     elif sys.argv[1] == "--search":
         print(
             colored(
-                "search " + sys.argv[1] + "in logs of all repos",
+                "search " + sys.argv[1] + " in logs of all repos",
                 "green",
             )
         )
@@ -158,7 +183,9 @@ def pygitscrum():
                 [
                     "--no-pager",
                     "log",
-                    "--format=%ad - %h - %S --- %C(yellow)%C(reset)%s - %aN ",
+                    # ou --all?
+                    "--branches=*",
+                    "--format=%ad - %h --- %S- %s - %ae - %aN",
                     "--date-order",
                     "--date=short",
                     "--reverse",
@@ -173,7 +200,7 @@ def pygitscrum():
                         print(colored(item.strip(), "yellow"))
 
 
-def command_git_check(repo, params):
+def command_git_check_en(repo, params):
     new_env = dict(os.environ)
     new_env["LC_ALL"] = "EN"
     params_git = ["git", "-C", repo + "/.."]
@@ -185,8 +212,16 @@ def command_git_check(repo, params):
         return ""
 
 
-def command_git_call(repo, params):
-    new_env = dict(os.environ)
-    new_env["LC_ALL"] = "EN"
+def command_git_check(repo, params):
     params_git = ["git", "-C", repo + "/.."]
-    subprocess.call(params_git + params, env=new_env)
+    try:
+        return subprocess.check_output(params_git + params).decode()
+    except subprocess.CalledProcessError as err:
+        return ""
+
+
+def command_git_call(repo, params):
+    # new_env = dict(os.environ)
+    # new_env["LC_ALL"] = "EN"
+    params_git = ["git", "-C", repo + "/.."]
+    subprocess.call(params_git + params)
