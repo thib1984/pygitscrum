@@ -40,10 +40,10 @@ def pygitscrum():
 
         USAGE: pygitscrum [OPTION] [PARAMETER]
 
-            --check     : check your repos one by one, fetch them, and ask you if a pull/push is available
-                        you can also pull/push or check the differences
+            --check     : check your repos one by one, track new branches, fetch all, and 
+                        ask you if a pull/push is available you can also pull/push or check the differences
             --daily     : check your repos one by one, and print the recents commits since yesterday
-            --search    : check in all repos and print the logs with the key word in parameter
+            --search    : search in all repos and print the logs with the key word in parameter
             --help      : display this help message
             --update    : update this programm
             --version   : display the version
@@ -75,6 +75,20 @@ def pygitscrum():
         ]
         subprocess.check_call(params)
 
+    elif sys.argv[1] == "--track":
+        files_to_work = []
+        # boucler repos git
+        print(
+            colored(
+                "prune deleted remoted branches, track all new repos available in current directory and fetch them...",
+                "green",
+            )
+        )
+        for repo in files:
+            print(colored(repo, "blue"))
+            command_git_check_en(
+                repo, ["remote", "update", "--prune"]
+            )
     elif sys.argv[1] == "--check":
         files_to_work = []
         # boucler repos git
@@ -86,10 +100,41 @@ def pygitscrum():
         for repo in files:
             print(colored(repo, "blue"))
 
-            # quelle difference?
-            # comment forcer la récuperation des branches distantes?
-            command_git_check_en(repo, ["remote", "update"])
-            command_git_check_en(repo, ["fetch", "--all"])
+            remote_tracking_branches = command_git_check_en(
+                repo, ["branch", "-r"]
+            )
+            local_branches = command_git_check_en(
+                repo, ["branch", "-vv"]
+            )
+            for line_remote_branche in remote_tracking_branches.split(
+                "\n"
+            ):
+                # pas de ligne vide, pas de HEAD
+                if (
+                    line_remote_branche != ""
+                    and "->" not in line_remote_branche
+                    and line_remote_branche.split()[0]
+                    not in local_branches
+                ):
+                    # print(line_remote_branche.split()[0])
+                    local_branche_track = line_remote_branche.replace(
+                        "origin/", "", 1
+                    )
+                    remote_branch_to_track = line_remote_branche
+                    command_git_check_en_print(
+                        repo,
+                        [
+                            "branch",
+                            "--track",
+                            local_branche_track.strip(" "),
+                            remote_branch_to_track.strip(" "),
+                        ],
+                        True,
+                    )
+            command_git_check_en_print(
+                repo, ["remote", "update"], True
+            )
+            command_git_check_en_print(repo, ["fetch", "--all"], True)
             while (
                 not "Your branch is up to date"
                 in command_git_check_en(repo, ["status"])
@@ -104,9 +149,9 @@ def pygitscrum():
                     "p(ull)/P(ush)/s(how)/S(how all)/q(uit)? "
                 )
                 if answer == "p":
-                    command_git_call(repo, ["pull"])
+                    command_git_call_print(repo, ["pull"], True)
                 elif answer == "P":
-                    command_git_call(repo, ["push"])
+                    command_git_call_print(repo, ["push"], True)
                 elif answer == "S":
                     command_git_call(
                         repo, ["log", "-p", "HEAD..FETCH_HEAD"]
@@ -156,7 +201,7 @@ def pygitscrum():
                     "--no-pager",
                     "log",
                     "--since=yesterday",
-                    # ou --all?
+                    # "--all",  # ? (permet de voir ce qu'on n'a pas récupéré?) refs/stash
                     "--branches=*",
                     "--author=" + me.rstrip(),
                     "--format=%ad - %h --- %s",
@@ -183,8 +228,8 @@ def pygitscrum():
                 [
                     "--no-pager",
                     "log",
-                    # ou --all?
-                    "--branches=*",
+                    # ou --all? refs/stash
+                    "--all",
                     "--format=%ad - %h --- %S- %s - %ae - %aN",
                     "--date-order",
                     "--date=short",
@@ -192,36 +237,62 @@ def pygitscrum():
                 ],
             )
             if log != "":
-                for item in log.split("\n"):
-                    if sys.argv[2] in item:
+                for line_remote_branche in log.split("\n"):
+                    if sys.argv[2] in line_remote_branche:
                         if first:
                             print(colored(repo, "blue"))
                             first = False
-                        print(colored(item.strip(), "yellow"))
+                        print(
+                            colored(
+                                line_remote_branche.strip(), "yellow"
+                            )
+                        )
 
 
 def command_git_check_en(repo, params):
+    return command_git_check_en_print(repo, params, False)
+
+
+def command_git_check_en_print(repo, params, display):
     new_env = dict(os.environ)
     new_env["LC_ALL"] = "EN"
     params_git = ["git", "-C", repo + "/.."]
+
     try:
+        ligne_commande = params_git + params
+        if display:
+            print("debug : " + str(ligne_commande))
         return subprocess.check_output(
-            params_git + params, env=new_env
+            ligne_commande, env=new_env
         ).decode("utf-8")
     except subprocess.CalledProcessError as err:
         return ""
 
 
 def command_git_check(repo, params):
+    return command_git_check_print(repo, params, False)
+
+
+def command_git_check_print(repo, params, display):
     params_git = ["git", "-C", repo + "/.."]
     try:
-        return subprocess.check_output(params_git + params).decode()
+        ligne_commande = params_git + params
+        if display:
+            print("debug : " + str(ligne_commande))
+        return subprocess.check_output(ligne_commande).decode()
     except subprocess.CalledProcessError as err:
         return ""
 
 
 def command_git_call(repo, params):
+    command_git_call_print(repo, params, False)
+
+
+def command_git_call_print(repo, params, display):
     # new_env = dict(os.environ)
     # new_env["LC_ALL"] = "EN"
     params_git = ["git", "-C", repo + "/.."]
+    ligne_commande = params_git + params
+    if display:
+        print("debug : " + str(ligne_commande))
     subprocess.call(params_git + params)
