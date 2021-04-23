@@ -12,16 +12,18 @@ from pygitscrum.args import compute_args
 
 def git_check(files):
     files_to_work = []
-    # boucler repos git
-    print(colored("check all repos in current directory...", "green"))
     for repo in files:
         if compute_args().debug:
             print("debug : " + repo + " ...")
 
+        ############################################
         remote_tracking_branches = command_git_check_en(
             repo, ["branch", "-r"]
         )
         local_branches = command_git_check_en(repo, ["branch", "-vv"])
+        ############################################
+
+        ############################################
         for line_remote_branche in remote_tracking_branches.split(
             "\n"
         ):
@@ -32,23 +34,32 @@ def git_check(files):
                 and line_remote_branche.split()[0]
                 not in local_branches
             ):
-                # print(line_remote_branche.split()[0])
-                local_branche_track = line_remote_branche.replace(
-                    "origin/", "", 1
+                new_local_tracking_branche = (
+                    line_remote_branche.replace(
+                        "origin/", "", 1
+                    ).strip(" ")
                 )
-                remote_branch_to_track = line_remote_branche
+                remote_branch_to_track = line_remote_branche.strip(
+                    " "
+                )
                 command_git_check_en_print(
                     repo,
                     [
                         "branch",
                         "--track",
-                        local_branche_track.strip(" "),
-                        remote_branch_to_track.strip(" "),
+                        new_local_tracking_branche,
+                        remote_branch_to_track,
                     ],
                     True,
                 )
+        ############################################
+
+        ############################################
         command_git_check_en_print(repo, ["remote", "update"], True)
         command_git_check_en_print(repo, ["fetch", "--all"], True)
+        ############################################
+
+        ############################################
         while not "Your branch is up to date" in command_git_check_en(
             repo, ["status"]
         ):
@@ -93,6 +104,8 @@ def git_check(files):
             else:
                 files_to_work.append(repo)
                 break
+
+    ############################################
     if len(files_to_work) > 0:
         print("")
         print(
