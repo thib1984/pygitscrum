@@ -7,6 +7,7 @@ from pygitscrum.git import (
     command_git_check_en_print,
     command_git_check_print,
 )
+from pygitscrum.args import compute_args
 
 
 def git_check(files):
@@ -14,7 +15,8 @@ def git_check(files):
     # boucler repos git
     print(colored("check all repos in current directory...", "green"))
     for repo in files:
-        print("debug : " + repo + " ...")
+        if compute_args().debug:
+            print("debug : " + repo + " ...")
 
         remote_tracking_branches = command_git_check_en(
             repo, ["branch", "-r"]

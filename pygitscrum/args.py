@@ -5,13 +5,19 @@ def compute_args():
     my_parser = argparse.ArgumentParser(
         description="pygitscrum : masterize git!!!",
         epilog="""
-        Full documentation at: <https://github.com/thib1984/ytdlmusic>.
-        Report bugs to <https://github.com/thib1984/ytdlmusic/issues>.
+        Full documentation at: <https://github.com/thib1984/pygitscrum>.
+        Report bugs to <https://github.com/thib1984/pygitscrum/issues>.
         MIT Licence.
         Copyright (c) 2021 thib1984.
         This is free software: you are free to change and redistribute it.
         There is NO WARRANTY, to the extent permitted by law.
         Written by thib1984.""",
+    )
+    my_parser.add_argument(
+        "-v",
+        "--debug",
+        action="store_true",
+        help="full trace",
     )
     my_group = my_parser.add_mutually_exclusive_group(required=True)
     my_group.add_argument(
@@ -45,7 +51,7 @@ def compute_args():
         help="check your repos one by one, track new branches, fetch all, and delete inexisting branches at distant",
     )
     my_group.add_argument(
-        "-v",
+        "-V",
         "--version",
         action="store_true",
         help="display pygitscrum's version",
@@ -56,5 +62,6 @@ def compute_args():
         action="store_true",
         help="update pygitscrum",
     )
+
     args = my_parser.parse_args()
     return args

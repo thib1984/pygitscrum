@@ -1,5 +1,6 @@
 import os
 import subprocess
+from pygitscrum.args import compute_args
 
 
 def command_git_check_en(repo, params):
@@ -13,7 +14,7 @@ def command_git_check_en_print(repo, params, display):
 
     try:
         ligne_commande = params_git + params
-        if display:
+        if display and compute_args().debug:
             print("debug : " + str(ligne_commande))
         return subprocess.check_output(
             ligne_commande, env=new_env
@@ -30,7 +31,7 @@ def command_git_check_print(repo, params, display):
     params_git = ["git", "-C", repo + "/.."]
     try:
         ligne_commande = params_git + params
-        if display:
+        if display and compute_args().debug:
             print("debug : " + str(ligne_commande))
         return subprocess.check_output(ligne_commande).decode()
     except subprocess.CalledProcessError as err:
@@ -46,6 +47,6 @@ def command_git_call_print(repo, params, display):
     # new_env["LC_ALL"] = "EN"
     params_git = ["git", "-C", repo + "/.."]
     ligne_commande = params_git + params
-    if display:
+    if display and compute_args().debug:
         print("debug : " + str(ligne_commande))
     subprocess.call(params_git + params)
