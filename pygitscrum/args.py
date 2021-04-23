@@ -42,13 +42,13 @@ def compute_args():
         "-c",
         "--check",
         action="store_true",
-        help="check your repos one by one, fetch all, and ask you if a pull/push is available you can also pull/push or check the differences",
+        help="check your repos one by one, fetch all, and ask you if a pull/push is available, you can also pull/push or check the differences",
     )
     my_group.add_argument(
         "-t",
         "--track",
         action="store_true",
-        help="check your repos one by one, track new branches, fetch all, and delete inexisting branches at distant",
+        help="check your repos one by one, track new branches, delete inexisting branches at distant, and fetch all",
     )
     my_group.add_argument(
         "-V",
