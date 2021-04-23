@@ -54,7 +54,10 @@ def pygitscrum():
                         commandes jouees sous validation : pull, push, log
                         remote branch --track, remote update, fetch --all                         
             --daily     : check your repos one by one, and print the recents commits since yesterday
-                        commandes jouees : log           
+                        commandes jouees : log
+                        avec un parametre, since yesterday est change par since [PARAMETER]
+                        ex : pygitsearch --daily "last friday" 
+                        ex : pygitsearch --daily "3 days ago"          
             --search    : search in all repos and print the logs with the key word in parameter
                         commandes jouees : log             
             --help      : display this help message
