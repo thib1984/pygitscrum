@@ -29,6 +29,11 @@ def pygitscrum():
     files.sort()
     # print(files)
 
+    print(
+        colored(
+            "launch from : " + os.path.abspath(directory), "yellow"
+        )
+    )
     if len(sys.argv) < 2 or (sys.argv[1] == "--help"):
         print(
             """
@@ -39,11 +44,19 @@ def pygitscrum():
             with pygitscrum you can masterize few git actions
 
         USAGE: pygitscrum [OPTION] [PARAMETER]
-
+            --track     : check your repos one by one, track new branches, fetch all and delete inexisting 
+                        branches at distant
+                        commandes jouees : remote update --prune, remote branch -r, remote branch -vv,
+                        remote branch --track, remote update, fetch --all 
             --check     : check your repos one by one, track new branches, fetch all, and 
                         ask you if a pull/push is available you can also pull/push or check the differences
+                        commandes jouees : remote branch -r, remote branch -vv
+                        commandes jouees sous validation : pull, push, log
+                        remote branch --track, remote update, fetch --all                         
             --daily     : check your repos one by one, and print the recents commits since yesterday
+                        commandes jouees : log           
             --search    : search in all repos and print the logs with the key word in parameter
+                        commandes jouees : log             
             --help      : display this help message
             --update    : update this programm
             --version   : display the version
@@ -78,17 +91,46 @@ def pygitscrum():
     elif sys.argv[1] == "--track":
         files_to_work = []
         # boucler repos git
-        print(
-            colored(
-                "prune deleted remoted branches, track all new repos available in current directory and fetch them...",
-                "green",
-            )
-        )
         for repo in files:
-            print(colored(repo, "blue"))
-            command_git_check_en(
-                repo, ["remote", "update", "--prune"]
+            command_git_check_en_print(
+                repo, ["remote", "update", "--prune"], True
             )
+
+            remote_tracking_branches = command_git_check_en(
+                repo, ["branch", "-r"]
+            )
+            local_branches = command_git_check_en(
+                repo, ["branch", "-vv"]
+            )
+            for line_remote_branche in remote_tracking_branches.split(
+                "\n"
+            ):
+                # pas de ligne vide, pas de HEAD
+                if (
+                    line_remote_branche != ""
+                    and "->" not in line_remote_branche
+                    and line_remote_branche.split()[0]
+                    not in local_branches
+                ):
+                    # print(line_remote_branche.split()[0])
+                    local_branche_track = line_remote_branche.replace(
+                        "origin/", "", 1
+                    )
+                    remote_branch_to_track = line_remote_branche
+                    command_git_check_en_print(
+                        repo,
+                        [
+                            "branch",
+                            "--track",
+                            local_branche_track.strip(" "),
+                            remote_branch_to_track.strip(" "),
+                        ],
+                        True,
+                    )
+            command_git_check_en_print(
+                repo, ["remote", "update"], True
+            )
+            command_git_check_en_print(repo, ["fetch", "--all"], True)
     elif sys.argv[1] == "--check":
         files_to_work = []
         # boucler repos git
@@ -98,7 +140,7 @@ def pygitscrum():
             )
         )
         for repo in files:
-            print(colored(repo, "blue"))
+            print("debug : " + repo + " ...")
 
             remote_tracking_branches = command_git_check_en(
                 repo, ["branch", "-r"]
@@ -139,6 +181,7 @@ def pygitscrum():
                 not "Your branch is up to date"
                 in command_git_check_en(repo, ["status"])
             ):
+                print(colored(repo, "yellow"))
                 print(
                     colored(
                         command_git_check_en(repo, ["status"]),
@@ -192,7 +235,9 @@ def pygitscrum():
             )
 
     elif sys.argv[1] == "--daily":
-        print(colored("check for the daily...", "green"))
+        since = "yesterday"
+        if len(sys.argv) >= 3:
+            since = sys.argv[2]
         for repo in files:
             me = command_git_check(repo, ["config", "user.name"])
             log = command_git_check(
@@ -200,7 +245,7 @@ def pygitscrum():
                 [
                     "--no-pager",
                     "log",
-                    "--since=yesterday",
+                    "--since=" + since,
                     # "--all",  # ? (permet de voir ce qu'on n'a pas récupéré?) refs/stash
                     "--branches=*",
                     "--author=" + me.rstrip(),
@@ -211,16 +256,10 @@ def pygitscrum():
                 ],
             )
             if log != "":
-                print(colored(repo, "blue"))
+                print(colored(repo, "green"))
                 print(colored(log, "yellow").rstrip())
 
     elif sys.argv[1] == "--search":
-        print(
-            colored(
-                "search " + sys.argv[1] + " in logs of all repos",
-                "green",
-            )
-        )
         for repo in files:
             first = True
             log = command_git_check(
@@ -237,16 +276,12 @@ def pygitscrum():
                 ],
             )
             if log != "":
-                for line_remote_branche in log.split("\n"):
-                    if sys.argv[2] in line_remote_branche:
+                for line_log in log.split("\n"):
+                    if sys.argv[2].lower() in line_log.lower():
                         if first:
-                            print(colored(repo, "blue"))
+                            print(colored(repo, "green"))
                             first = False
-                        print(
-                            colored(
-                                line_remote_branche.strip(), "yellow"
-                            )
-                        )
+                        print(colored(line_log.strip(), "yellow"))
 
 
 def command_git_check_en(repo, params):
