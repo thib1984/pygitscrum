@@ -74,7 +74,7 @@ def compute_args():
         "-t",
         "--track",
         action="store_true",
-        help="fetch all tracking branches, add new branches from remote in tracked repository, prune tracking branches if not exist in remote repository",
+        help="fetch all tracking branche and prune if not exist in remote repository, copy the new in local branches",
     )
     my_group.add_argument(
         "-V",
