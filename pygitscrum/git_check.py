@@ -26,10 +26,9 @@ def git_check(files):
             print("debug : " + repo + " ...")
 
         ############################################
-        # UPDATE + FETCH
+        # UPDATE TRACKED REPOSITORY
         ############################################
-        command_git_check_en_print(repo, ["remote", "update"], True)
-        command_git_check_en_print(repo, ["fetch", "--all"], True)
+        command_git_check_en_print(repo, ["fetch", "--all", "--prune"], True)
         ############################################
 
         ############################################
