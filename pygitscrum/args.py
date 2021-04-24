@@ -31,7 +31,7 @@ def compute_args():
         "-f",
         "--fast",
         action="store_true",
-        help="skip all ask",
+        help="skip all questions, mute off output, except the summary",
     )
     my_group = my_parser.add_mutually_exclusive_group(required=True)
     my_group.add_argument(
@@ -56,25 +56,25 @@ def compute_args():
         "-c",
         "--check",
         action="store_true",
-        help="fetch all, ask you action if a pull/push is available",
+        help="fetch all, check status, and ask you action if a pull/push is available",
     )
     my_group.add_argument(
         "-w",
         "--wip",
         action="store_true",
-        help="fetch all, print stashs, branches with push available, and number of no commit changed files ",
+        help="fetch all, print stashs branches with push available, and number of untracked/unstagef/uncommited files",
     )
     my_group.add_argument(
         "-p",
         "--prune",
         action="store_true",
-        help="DRY RUN! : fetch all, print stash, and gone local branch",
+        help="fetch all, print stashs and gone local branch (inexisting in refs/remote)",
     )
     my_group.add_argument(
         "-t",
         "--track",
         action="store_true",
-        help="fetch all, track new branches, delete refs from inexisting remote, fetch all",
+        help="fetch all, track new branches in remote repository, prune refs/remote if inexisting in remote repository",
     )
     my_group.add_argument(
         "-V",

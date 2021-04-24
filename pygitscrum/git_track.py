@@ -8,12 +8,23 @@ from pygitscrum.git import (
 )
 from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.args import compute_args
+from termcolor import colored
 
 
 def git_track(files):
     """
     entry point for --track
     """
+    print(
+        colored(
+            "/!\ If you accept the launch, you will update, PRUNE and fetch the refs branches in your system",
+            "red",
+        )
+    )
+    answer = input("Do you confirm (Y/n) ? ")
+    if not (answer.lower() == "" or answer.lower() == "y"):
+        print(colored("Cancelled operation", "green"))
+        exit(1)
     for repo in files:
         repo = absolute_path_without_git(repo)
         if compute_args().debug:

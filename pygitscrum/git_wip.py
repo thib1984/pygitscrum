@@ -26,6 +26,7 @@ def git_wip(files):
     dict_repo_with_uncommited = {}
     dict_repo_with_unstaged = {}
     dict_repo_with_untracked = {}
+    dict_repo_with_special_branches = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
         if compute_args().debug:
@@ -60,6 +61,20 @@ def git_wip(files):
             repo, ["ls-files", "--others", "--exclude-standard"]
         )
         first = True
+        branch = command_git_check(
+            repo, ["branch", "--show-current"]
+        ).rstrip()
+        if branch not in ["master", "develop", "main", "dev"]:
+            dict_repo_with_special_branches[repo] = branch
+            if not compute_args().fast:
+                first = print_repo_if_first(first, repo)
+                print(
+                    colored(
+                        "/!\ branch = "
+                        + dict_repo_with_special_branches[repo],
+                        "yellow",
+                    )
+                )
         if wip_stash != "":
             for line in wip_stash.split("\n"):
                 if "stash" in line:
@@ -119,13 +134,13 @@ def git_wip(files):
                 first = print_repo_if_first(first, repo)
                 print(
                     colored(
-                        str(len(files_untracked.split("\n")))
+                        str(len(files_untracked.split("\n")) - 1)
                         + " files untracked",
                         "yellow",
                     )
                 )
-                dict_repo_with_untracked[repo] = len(
-                    files_untracked.split("\n")
+                dict_repo_with_untracked[repo] = (
+                    len(files_untracked.split("\n")) - 1
                 )
 
     ############################################
@@ -143,3 +158,15 @@ def git_wip(files):
     print_resume_map(
         dict_repo_with_untracked, "Repos with untracked files"
     )
+    if len(dict_repo_with_special_branches.values()) != 0:
+        print("")
+        print(colored("Repos with special branches : ", "green"))
+        for key in dict_repo_with_special_branches:
+            print(
+                colored(
+                    key
+                    + " --> "
+                    + dict_repo_with_special_branches[key],
+                    "yellow",
+                )
+            )
