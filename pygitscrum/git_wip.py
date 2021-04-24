@@ -97,9 +97,9 @@ def git_wip(files):
                                 "yellow",
                             )
                         )
-                        dict_repo_with_push = update_dict(
-                            repo, dict_repo_with_push
-                        )
+                    dict_repo_with_push = update_dict(
+                        repo, dict_repo_with_push
+                    )
 
         if files_unstaged != "":
             if not compute_args().fast:
@@ -111,9 +111,9 @@ def git_wip(files):
                         "yellow",
                     )
                 )
-                dict_repo_with_unstaged[repo] = (
-                    len(files_unstaged.split("\n")) - 1
-                )
+            dict_repo_with_unstaged[repo] = (
+                len(files_unstaged.split("\n")) - 1
+            )
 
         if files_uncommited != "":
             if not compute_args().fast:
@@ -125,9 +125,9 @@ def git_wip(files):
                         "yellow",
                     )
                 )
-                dict_repo_with_uncommited[repo] = (
-                    len(files_uncommited.split("\n")) - 1
-                )
+            dict_repo_with_uncommited[repo] = (
+                len(files_uncommited.split("\n")) - 1
+            )
 
         if files_untracked != "":
             if not compute_args().fast:
@@ -139,9 +139,9 @@ def git_wip(files):
                         "yellow",
                     )
                 )
-                dict_repo_with_untracked[repo] = (
-                    len(files_untracked.split("\n")) - 1
-                )
+            dict_repo_with_untracked[repo] = (
+                len(files_untracked.split("\n")) - 1
+            )
 
     ############################################
     print_resume_map(dict_repo_with_stash, "Repos with stash")
