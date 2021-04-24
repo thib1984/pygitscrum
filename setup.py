@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="pygitscrum",
-    version="0.1.1",
+    version="0.2.0",
     description="pygitscrum",
     long_description="The complete description/installation/use/FAQ is available at : https://github.com/thib1984/pygitscrum#readme",
     url="https://github.com/thib1984/pygitscrum",
