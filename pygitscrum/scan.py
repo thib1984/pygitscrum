@@ -39,7 +39,7 @@ def print_repo_if_first(first, repo):
         first = False
         print(
             colored(
-                absolute_path_without_git(repo),
+                repo,
                 "green",
             )
         )

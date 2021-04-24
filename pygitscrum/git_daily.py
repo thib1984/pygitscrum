@@ -3,6 +3,7 @@
 """
 
 from termcolor import colored
+from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.args import compute_args
 from pygitscrum.git import (
     command_git_check,
@@ -15,6 +16,7 @@ def git_daily(files):
     """
     since = compute_args().daily
     for repo in files:
+        repo = absolute_path_without_git(repo)
         author = command_git_check(repo, ["config", "user.name"])
 
         log = command_git_check(

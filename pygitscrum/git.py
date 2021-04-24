@@ -26,7 +26,7 @@ def command_git_check_en_print(repo, params, display):
     """
     new_env = dict(os.environ)
     new_env["LC_ALL"] = "EN"
-    params_git = ["git", "-C", repo + "/.."]
+    params_git = ["git", "-C", repo]
 
     try:
         ligne_commande = params_git + params
@@ -56,7 +56,7 @@ def command_git_check_print(repo, params, display):
     local lang
     if display True, print the command
     """
-    params_git = ["git", "-C", repo + "/.."]
+    params_git = ["git", "-C", repo]
     try:
         ligne_commande = params_git + params
         if display and compute_args().debug:
@@ -83,7 +83,7 @@ def command_git_call_print(repo, params, display):
     if display True print the command
     local lang
     """
-    params_git = ["git", "-C", repo + "/.."]
+    params_git = ["git", "-C", repo]
     ligne_commande = params_git + params
     if display and compute_args().debug:
         print("debug : " + str(ligne_commande))

@@ -15,10 +15,9 @@ def git_track(files):
     entry point for --track
     """
     for repo in files:
+        repo = absolute_path_without_git(repo)
         if compute_args().debug:
-            print(
-                "debug : " + absolute_path_without_git(repo) + " ..."
-            )
+            print("debug : " + repo + " ...")
 
         ############################################
         # UPDATE + PRUNE + FETCH

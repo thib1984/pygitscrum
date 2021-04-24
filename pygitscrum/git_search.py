@@ -3,6 +3,7 @@
 """
 
 from termcolor import colored
+from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.git import (
     command_git_check,
 )
@@ -15,6 +16,7 @@ def git_search(files):
     """
     keyword = compute_args().search.lower()
     for repo in files:
+        repo = absolute_path_without_git(repo)
         first = True
         log = command_git_check(
             repo,

@@ -12,6 +12,7 @@ from pygitscrum.git import (
 )
 from pygitscrum.args import compute_args
 from pygitscrum.scan import absolute_path_without_git
+from pygitscrum.print import print_resume
 
 
 def git_check(files):
@@ -20,10 +21,9 @@ def git_check(files):
     """
     files_to_work = []
     for repo in files:
+        repo = absolute_path_without_git(repo)
         if compute_args().debug:
-            print(
-                "debug : " + absolute_path_without_git(repo) + " ..."
-            )
+            print("debug : " + repo + " ...")
 
         ############################################
         # UPDATE + FETCH
@@ -38,7 +38,10 @@ def git_check(files):
         while "Your branch is up to date" not in command_git_check_en(
             repo, ["status"]
         ):
-            print(colored(absolute_path_without_git(repo), "yellow"))
+            if compute_args().fast:
+                files_to_work.append(repo)
+                break
+            print(colored(repo, "yellow"))
             print(
                 colored(
                     command_git_check(repo, ["status"]),
@@ -77,16 +80,8 @@ def git_check(files):
                     ],
                 )
             else:
-                files_to_work.append(absolute_path_without_git(repo))
+                files_to_work.append(repo)
                 break
 
     ############################################
-    if len(files_to_work) > 0:
-        print("")
-        print(
-            colored(
-                "Folders that will be checked : \n"
-                + "\n".join(files_to_work),
-                "yellow",
-            )
-        )
+    print_resume(files_to_work, "Repos with pull/push available")

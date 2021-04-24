@@ -12,17 +12,20 @@ from pygitscrum.scan import (
     print_repo_if_first,
 )
 from pygitscrum.args import compute_args
+from pygitscrum.print import print_resume
 
 
 def git_prune(files):
     """
     entry point for --prune
     """
+
+    list_repo_with_stash = []
+    list_repo_with_gone_branches = []
     for repo in files:
+        repo = absolute_path_without_git(repo)
         if compute_args().debug:
-            print(
-                "debug : " + absolute_path_without_git(repo) + " ..."
-            )
+            print("debug : " + repo + " ...")
 
         ############################################
         # UPDATE + FETCH
@@ -48,15 +51,27 @@ def git_prune(files):
         if wip_stash != "":
             for line in wip_stash.split("\n"):
                 if "stash" in line:
-                    first = print_repo_if_first(first, repo)
-                    print(colored("stash - " + line, "yellow"))
+                    if not compute_args().fast:
+                        first = print_repo_if_first(first, repo)
+                        print(colored("stash - " + line, "yellow"))
+                    if repo not in list_repo_with_stash:
+                        list_repo_with_stash.append(repo)
         if diff_branches != "":
             for line in diff_branches.split("\n"):
                 if "[gone]" in line:
-                    first = print_repo_if_first(first, repo)
-                    print(
-                        colored(
-                            "gone branch - " + line,
-                            "yellow",
+                    if not compute_args().fast:
+                        first = print_repo_if_first(first, repo)
+                        print(
+                            colored(
+                                "gone branch - " + line,
+                                "yellow",
+                            )
                         )
-                    )
+                    if repo not in list_repo_with_gone_branches:
+                        list_repo_with_gone_branches.append(repo)
+
+    print_resume(list_repo_with_stash, "Repos with stash")
+    print_resume(
+        list_repo_with_stash,
+        "Repos with gone branches",
+    )

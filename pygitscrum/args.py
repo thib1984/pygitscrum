@@ -27,6 +27,12 @@ def compute_args():
         action="store_true",
         help="full trace",
     )
+    my_parser.add_argument(
+        "-f",
+        "--fast",
+        action="store_true",
+        help="skip all ask",
+    )
     my_group = my_parser.add_mutually_exclusive_group(required=True)
     my_group.add_argument(
         "-d",
