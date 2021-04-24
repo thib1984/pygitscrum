@@ -15,7 +15,9 @@ def git_check(files):
     files_to_work = []
     for repo in files:
         if compute_args().debug:
-            print("debug : " + repo + " ...")
+            print(
+                "debug : " + absolute_path_without_git(repo) + " ..."
+            )
 
         ############################################
         # UPDATE + FETCH

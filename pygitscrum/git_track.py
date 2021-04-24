@@ -7,12 +7,13 @@ from pygitscrum.git import (
     command_git_check_en_print,
     command_git_check_print,
 )
+from pygitscrum.scan import absolute_path_without_git
 
 
 def git_track(files):
 
     for repo in files:
-        print("debug : " + repo + " ...")
+        print("debug : " + absolute_path_without_git(repo) + " ...")
 
         ############################################
         # UPDATE + PRUNE + FETCH
