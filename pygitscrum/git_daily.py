@@ -23,10 +23,10 @@ def git_daily(files):
                 "--since=" + since,
                 # "--all",  # ? (permet de voir ce qu'on n'a pas récupéré?) refs/stash
                 "--branches=*",
+                "--date=format:%Y-%m-%d %H:%M",
                 "--author=" + me.rstrip(),
                 "--format=%ad - %h --- %s",
                 "--date-order",
-                "--date=short",
                 "--reverse",
             ],
         )

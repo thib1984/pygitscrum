@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 
 def compute_args():
@@ -62,6 +63,20 @@ def compute_args():
         action="store_true",
         help="update pygitscrum",
     )
+
+    my_parser.add_argument(
+        "to_path",
+        metavar="to_path",
+        type=str,
+        nargs="?",
+        default=".",
+        help="the path to scan, defaut '.'",
+    )
+
+    # if no parameter
+    if len(sys.argv) == 1:
+        my_parser.print_help()
+        exit(0)
 
     args = my_parser.parse_args()
     return args

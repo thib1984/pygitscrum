@@ -19,12 +19,11 @@ def git_search(files):
             [
                 "--no-pager",
                 "log",
-                # ou --all? refs/stash
+                "--branches=*",
+                "--date=format:%Y-%m-%d %H:%M",
                 "--all",
                 "--format=%ad - %h --- %S- %s - %ae - %aN",
                 "--date-order",
-                "--date=short",
-                "--reverse",
             ],
         )
         if log != "":

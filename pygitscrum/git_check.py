@@ -8,6 +8,7 @@ from pygitscrum.git import (
     command_git_check_print,
 )
 from pygitscrum.args import compute_args
+from pygitscrum.scan import absolute_path_without_git
 
 
 def git_check(files):
@@ -29,10 +30,10 @@ def git_check(files):
         while not "Your branch is up to date" in command_git_check_en(
             repo, ["status"]
         ):
-            print(colored(repo, "yellow"))
+            print(colored(absolute_path_without_git(repo), "yellow"))
             print(
                 colored(
-                    command_git_check_en(repo, ["status"]),
+                    command_git_check(repo, ["status"]),
                     "yellow",
                 )
             )
@@ -68,7 +69,7 @@ def git_check(files):
                     ],
                 )
             else:
-                files_to_work.append(repo)
+                files_to_work.append(absolute_path_without_git(repo))
                 break
 
     ############################################
