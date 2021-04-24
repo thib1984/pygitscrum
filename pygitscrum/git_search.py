@@ -1,16 +1,18 @@
+"""
+--search scripts
+"""
+
 from termcolor import colored
 from pygitscrum.git import (
-    command_git_call,
-    command_git_call_print,
     command_git_check,
-    command_git_check_en,
-    command_git_check_en_print,
-    command_git_check_print,
 )
 from pygitscrum.args import compute_args
 
 
 def git_search(files):
+    """
+    entry point for --search
+    """
     keyword = compute_args().search.lower()
     for repo in files:
         first = True

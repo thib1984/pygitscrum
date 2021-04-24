@@ -1,3 +1,7 @@
+"""
+--check scripts
+"""
+
 from termcolor import colored
 from pygitscrum.git import (
     command_git_call,
@@ -5,13 +9,15 @@ from pygitscrum.git import (
     command_git_check,
     command_git_check_en,
     command_git_check_en_print,
-    command_git_check_print,
 )
 from pygitscrum.args import compute_args
 from pygitscrum.scan import absolute_path_without_git
 
 
 def git_check(files):
+    """
+    entry point for --check
+    """
     files_to_work = []
     for repo in files:
         if compute_args().debug:
@@ -29,7 +35,7 @@ def git_check(files):
         ############################################
         # GIT STATUS
         ############################################
-        while not "Your branch is up to date" in command_git_check_en(
+        while "Your branch is up to date" not in command_git_check_en(
             repo, ["status"]
         ):
             print(colored(absolute_path_without_git(repo), "yellow"))

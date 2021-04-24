@@ -1,19 +1,24 @@
-from termcolor import colored
+"""
+--track scripts
+"""
+
 from pygitscrum.git import (
-    command_git_call,
-    command_git_call_print,
-    command_git_check,
     command_git_check_en,
     command_git_check_en_print,
-    command_git_check_print,
 )
 from pygitscrum.scan import absolute_path_without_git
+from pygitscrum.args import compute_args
 
 
 def git_track(files):
-
+    """
+    entry point for --track
+    """
     for repo in files:
-        print("debug : " + absolute_path_without_git(repo) + " ...")
+        if compute_args().debug:
+            print(
+                "debug : " + absolute_path_without_git(repo) + " ..."
+            )
 
         ############################################
         # UPDATE + PRUNE + FETCH
@@ -61,7 +66,6 @@ def git_track(files):
                     True,
                 )
 
-        # TODO is necessary?
         ############################################
         # UPDATE + PRUNE + FETCH
         ############################################

@@ -1,8 +1,15 @@
+"""
+pygitscrum argparse gestion
+"""
+
 import argparse
 import sys
 
 
 def compute_args():
+    """
+    check args and return them
+    """
     my_parser = argparse.ArgumentParser(
         description="pygitscrum : masterize git!!!",
         epilog="""
@@ -24,12 +31,12 @@ def compute_args():
     my_group.add_argument(
         "-d",
         "--daily",
-        metavar="since",
+        metavar="git_period",
         action="store",
         type=str,
         nargs="?",
         const="yesterday",
-        help="from scrum time, optionnal parameter : the 'since' in git format",
+        help="list your commits since <git_period> (default : yesterday) from all branches",
     )
     my_group.add_argument(
         "-s",
@@ -37,19 +44,31 @@ def compute_args():
         metavar="keyword",
         action="store",
         type=str,
-        help="search in the git logs the 'keyword'",
+        help="search in logs 'keyword' from all",
     )
     my_group.add_argument(
         "-c",
         "--check",
         action="store_true",
-        help="check your repos one by one, fetch all, and ask you if a pull/push is available, you can also pull/push or check the differences",
+        help="fetch all, ask you action if a pull/push is available",
+    )
+    my_group.add_argument(
+        "-w",
+        "--wip",
+        action="store_true",
+        help="fetch all, print stashs, branches with push available, and number of no commit changed files ",
+    )
+    my_group.add_argument(
+        "-p",
+        "--prune",
+        action="store_true",
+        help="DRY RUN! : fetch all, print stash, and gone local branch",
     )
     my_group.add_argument(
         "-t",
         "--track",
         action="store_true",
-        help="check your repos one by one, track new branches, delete inexisting branches at distant, and fetch all",
+        help="fetch all, track new branches, delete refs from inexisting remote, fetch all",
     )
     my_group.add_argument(
         "-V",
@@ -76,7 +95,7 @@ def compute_args():
     # if no parameter
     if len(sys.argv) == 1:
         my_parser.print_help()
-        exit(0)
+        sys.exit(0)
 
     args = my_parser.parse_args()
     return args
