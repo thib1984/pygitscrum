@@ -10,9 +10,10 @@ from pygitscrum.git import (
 from pygitscrum.scan import (
     absolute_path_without_git,
     print_repo_if_first,
+    update_dict,
 )
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume
+from pygitscrum.print import print_resume_map
 
 
 def git_prune(files):
@@ -20,8 +21,8 @@ def git_prune(files):
     entry point for --prune
     """
 
-    list_repo_with_stash = []
-    list_repo_with_gone_branches = []
+    map_repo_with_stash = {}
+    map_repo_with_gone_branches = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
         if compute_args().debug:
@@ -54,8 +55,9 @@ def git_prune(files):
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
                         print(colored("stash - " + line, "yellow"))
-                    if repo not in list_repo_with_stash:
-                        list_repo_with_stash.append(repo)
+                    map_repo_with_stash = update_dict(
+                        repo, map_repo_with_stash
+                    )
         if diff_branches != "":
             for line in diff_branches.split("\n"):
                 if "[gone]" in line:
@@ -67,11 +69,12 @@ def git_prune(files):
                                 "yellow",
                             )
                         )
-                    if repo not in list_repo_with_gone_branches:
-                        list_repo_with_gone_branches.append(repo)
+                    map_repo_with_gone_branches = update_dict(
+                        repo, map_repo_with_gone_branches
+                    )
 
-    print_resume(list_repo_with_stash, "Repos with stash")
-    print_resume(
-        list_repo_with_stash,
+    print_resume_map(map_repo_with_stash, "Repos with stash")
+    print_resume_map(
+        map_repo_with_gone_branches,
         "Repos with gone branches",
     )

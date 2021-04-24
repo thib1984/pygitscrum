@@ -2,6 +2,7 @@
 --wip scripts
 """
 
+import sys
 from termcolor import colored
 from pygitscrum.git import (
     command_git_check,
@@ -10,20 +11,21 @@ from pygitscrum.git import (
 from pygitscrum.scan import (
     absolute_path_without_git,
     print_repo_if_first,
+    update_dict,
 )
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume
+from pygitscrum.print import print_resume_map
 
 
 def git_wip(files):
     """
     entry point for --wip
     """
-    list_repo_with_stash = []
-    list_repo_with_push = []
-    list_repo_with_uncommited = []
-    list_repo_with_unstaged = []
-    list_repo_with_untracked = []
+    dict_repo_with_stash = {}
+    dict_repo_with_push = {}
+    dict_repo_with_uncommited = {}
+    dict_repo_with_unstaged = {}
+    dict_repo_with_untracked = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
         if compute_args().debug:
@@ -66,8 +68,9 @@ def git_wip(files):
                         print(
                             colored("wait stash - " + line, "yellow")
                         )
-                    if repo not in list_repo_with_stash:
-                        list_repo_with_stash.append(repo)
+                    dict_repo_with_stash = update_dict(
+                        repo, dict_repo_with_stash
+                    )
         if diff_branches != "":
             for line in diff_branches.split("\n"):
                 if "[ahead " in line:
@@ -79,8 +82,9 @@ def git_wip(files):
                                 "yellow",
                             )
                         )
-                    if repo not in list_repo_with_push:
-                        list_repo_with_push.append(repo)
+                        dict_repo_with_push = update_dict(
+                            repo, dict_repo_with_push
+                        )
 
         if files_unstaged != "":
             if not compute_args().fast:
@@ -92,8 +96,9 @@ def git_wip(files):
                         "yellow",
                     )
                 )
-            if repo not in list_repo_with_unstaged:
-                list_repo_with_unstaged.append(repo)
+                dict_repo_with_unstaged[repo] = (
+                    len(files_unstaged.split("\n")) - 1
+                )
 
         if files_uncommited != "":
             if not compute_args().fast:
@@ -105,8 +110,9 @@ def git_wip(files):
                         "yellow",
                     )
                 )
-            if repo not in list_repo_with_uncommited:
-                list_repo_with_uncommited.append(repo)
+                dict_repo_with_uncommited[repo] = (
+                    len(files_uncommited.split("\n")) - 1
+                )
 
         if files_untracked != "":
             if not compute_args().fast:
@@ -118,20 +124,22 @@ def git_wip(files):
                         "yellow",
                     )
                 )
-            if repo not in list_repo_with_untracked:
-                list_repo_with_untracked.append(repo)
+                dict_repo_with_untracked[repo] = len(
+                    files_untracked.split("\n")
+                )
 
     ############################################
-
-    print_resume(list_repo_with_stash, "Repos with stash")
-    print_resume(
-        list_repo_with_push,
+    print_resume_map(dict_repo_with_stash, "Repos with stash")
+    print_resume_map(
+        dict_repo_with_push,
         "Repos with available push on one branche",
     )
-    print_resume(
-        list_repo_with_uncommited, "Repos with uncommited files"
+    print_resume_map(
+        dict_repo_with_uncommited, "Repos with uncommited files"
     )
-    print_resume(list_repo_with_unstaged, "Repos with unstaged files")
-    print_resume(
-        list_repo_with_untracked, "Repos with untracked files"
+    print_resume_map(
+        dict_repo_with_unstaged, "Repos with unstaged files"
+    )
+    print_resume_map(
+        dict_repo_with_untracked, "Repos with untracked files"
     )

@@ -12,7 +12,7 @@ from pygitscrum.git import (
 )
 from pygitscrum.args import compute_args
 from pygitscrum.scan import absolute_path_without_git
-from pygitscrum.print import print_resume
+from pygitscrum.print import print_resume_list
 
 
 def git_check(files):
@@ -84,4 +84,4 @@ def git_check(files):
                 break
 
     ############################################
-    print_resume(files_to_work, "Repos with pull/push available")
+    print_resume_list(files_to_work, "Repos with pull/push available")

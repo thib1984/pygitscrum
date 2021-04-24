@@ -44,3 +44,11 @@ def print_repo_if_first(first, repo):
             )
         )
     return first
+
+
+def update_dict(repo, dict_repo_with_stash):
+    if repo in dict_repo_with_stash:
+        dict_repo_with_stash[repo] = dict_repo_with_stash[repo] + 1
+    else:
+        dict_repo_with_stash[repo] = 1
+    return dict_repo_with_stash
