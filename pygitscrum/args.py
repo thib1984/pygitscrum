@@ -50,31 +50,31 @@ def compute_args():
         metavar="keyword",
         action="store",
         type=str,
-        help="search in logs 'keyword' from all",
+        help="search in logs 'keyword' from all branches in your local repository",
     )
     my_group.add_argument(
         "-c",
         "--check",
         action="store_true",
-        help="fetch all, check status, and ask you action if a pull/push is available",
+        help="fetch all tracking branches, check status of local branch, and ask you action if a pull/push is available vs the remote repository",
     )
     my_group.add_argument(
         "-w",
         "--wip",
         action="store_true",
-        help="fetch all, print stashs branches with push available, and number of untracked/unstagef/uncommited files",
+        help="fetch all tracking branches, print stashes, local branches with push available, and number of untracked/unstaged/uncommited files",
     )
     my_group.add_argument(
         "-p",
         "--prune",
         action="store_true",
-        help="fetch all, print stashs and gone local branch (inexisting in refs/remote)",
+        help="fetch all tracking branches, print stashes, and local branches with gone tracking branches",
     )
     my_group.add_argument(
         "-t",
         "--track",
         action="store_true",
-        help="fetch all, track new branches in remote repository, prune refs/remote if inexisting in remote repository",
+        help="fetch all tracking branches, add new branches from remote in tracked repository, prune tracking branches if not exist in remote repository",
     )
     my_group.add_argument(
         "-V",
