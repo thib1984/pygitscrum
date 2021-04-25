@@ -2,19 +2,15 @@
 --wip scripts
 """
 
-import sys
 from termcolor import colored
-from pygitscrum.git import (
-    command_git_check,
-    command_git_check_en_print,
-)
+from pygitscrum.git import git_output
 from pygitscrum.scan import (
     absolute_path_without_git,
     print_repo_if_first,
     update_dict,
 )
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume_map
+from pygitscrum.print import print_resume_map, print_debug
 
 
 def git_wip(files):
@@ -27,16 +23,16 @@ def git_wip(files):
     dict_repo_with_unstaged = {}
     dict_repo_with_untracked = {}
     dict_repo_with_special_branches = {}
+    map_repo_with_only_local_branches = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
-        if compute_args().debug:
-            print("debug : " + repo + " ...")
+        print_debug(repo + " ... ")
 
         ############################################
         # STASH + DIFF BRANCHES
         ############################################
-        wip_stash = command_git_check(repo, ["stash", "list"])
-        diff_branches = command_git_check(
+        wip_stash = git_output(repo, ["stash", "list"])
+        diff_branches = git_output(
             repo,
             [
                 "for-each-ref",
@@ -44,22 +40,30 @@ def git_wip(files):
                 "refs/heads",
             ],
         )
-        files_unstaged = command_git_check(
-            repo, ["diff", "--name-only"]
+        diff_branches_2 = git_output(
+            repo,
+            [
+                "branch",
+                "--format=%(refname:short) %(upstream)",
+            ],
         )
-        files_uncommited = command_git_check(
+        files_unstaged = git_output(repo, ["diff", "--name-only"])
+        files_uncommited = git_output(
             repo, ["diff", "--staged", "--name-only"]
         )
-        files_untracked = command_git_check(
+        files_untracked = git_output(
             repo, ["ls-files", "--others", "--exclude-standard"]
         )
         first = True
-        branch = command_git_check(
+        branch = git_output(
             repo, ["branch", "--show-current"]
         ).rstrip()
         if branch not in ["master", "develop", "main", "dev"]:
             dict_repo_with_special_branches[repo] = branch
             if not compute_args().fast:
+                print_debug(
+                    "the branch " + branch + "seems be special"
+                )
                 first = print_repo_if_first(first, repo)
                 print(
                     colored(
@@ -71,6 +75,7 @@ def git_wip(files):
         if wip_stash != "":
             for line in wip_stash.split("\n"):
                 if "stash" in line:
+                    print_debug("line " + line + " contains : stash")
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
                         print(
@@ -82,6 +87,11 @@ def git_wip(files):
         if diff_branches != "":
             for line in diff_branches.split("\n"):
                 if "[ahead " in line:
+                    print_debug(
+                        "line "
+                        + line
+                        + " seems indicate a pushable branch"
+                    )
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
                         print(
@@ -94,7 +104,28 @@ def git_wip(files):
                         repo, dict_repo_with_push
                     )
 
+        if diff_branches_2 != "":
+            for line in diff_branches_2.split("\n"):
+                if "refs/remotes" not in line and line != "":
+                    print_debug(
+                        "line "
+                        + line
+                        + " seems indicate a only local branch"
+                    )
+                    if not compute_args().fast:
+                        first = print_repo_if_first(first, repo)
+                        print(
+                            colored(
+                                "local only branch - " + line,
+                                "yellow",
+                            )
+                        )
+                    map_repo_with_only_local_branches = update_dict(
+                        repo, map_repo_with_only_local_branches
+                    )
+
         if files_unstaged != "":
+            print_debug("files_unstaged detected!")
             if not compute_args().fast:
                 first = print_repo_if_first(first, repo)
                 print(
@@ -109,6 +140,7 @@ def git_wip(files):
             )
 
         if files_uncommited != "":
+            print_debug("files files_uncommited detected!")
             if not compute_args().fast:
                 first = print_repo_if_first(first, repo)
                 print(
@@ -123,6 +155,7 @@ def git_wip(files):
             )
 
         if files_untracked != "":
+            print_debug("files untracked detected!")
             if not compute_args().fast:
                 first = print_repo_if_first(first, repo)
                 print(
@@ -141,6 +174,10 @@ def git_wip(files):
     print_resume_map(
         dict_repo_with_push,
         "Repos with available push on one branche",
+    )
+    print_resume_map(
+        map_repo_with_only_local_branches,
+        "Repos with local only branches ",
     )
     print_resume_map(
         dict_repo_with_uncommited, "Repos with uncommited files"

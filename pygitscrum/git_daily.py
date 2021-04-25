@@ -5,9 +5,14 @@
 from termcolor import colored
 from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume_map
+from pygitscrum.print import (
+    print_resume_map,
+    print_debug,
+    print_g,
+    print_y,
+)
 from pygitscrum.git import (
-    command_git_check,
+    git_output,
 )
 
 
@@ -19,9 +24,10 @@ def git_daily(files):
     dict_repo_with_commits = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
-        author = command_git_check(repo, ["config", "user.name"])
+        print_debug(repo + " ... ")
+        author = git_output(repo, ["config", "user.name"])
 
-        log = command_git_check(
+        log = git_output(
             repo,
             [
                 "--no-pager",
@@ -37,8 +43,8 @@ def git_daily(files):
         )
         if log != "":
             if not compute_args().fast:
-                print(colored(repo, "green"))
-                print(colored(log, "yellow").rstrip())
+                print_g(repo)
+                print_y(log.rstrip())
             dict_repo_with_commits[repo] = log.count("\n")
 
     print_resume_map(dict_repo_with_commits, "Repos commits")

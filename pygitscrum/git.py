@@ -1,90 +1,60 @@
 """
 git general scripts
 """
-
 import os
 import subprocess
 from pygitscrum.args import compute_args
+from pygitscrum.print import print_debug
 
 
-def command_git_check_en(repo, params):
-    """
-    command git -C repo
-    return status code
-    force english lang
-    no print the command
-    """
-    return command_git_check_en_print(repo, params, False)
+def git_code(repo, params):
+    params_git = ["git", "-C", repo]
+    ligne_commande = params_git + params
+    try:
+        print_debug("debug : " + str(ligne_commande))
+        return subprocess.check_call(
+            ligne_commande,
+        )
+    except Exception:
+        return 1
 
 
-def command_git_check_en_print(repo, params, display):
-    """
-    command git -C repo
-    return status code
-    force english lang
-    if display True, print the command
-    """
+def git_code_silent(repo, params):
     new_env = dict(os.environ)
     new_env["LC_ALL"] = "EN"
     params_git = ["git", "-C", repo]
-
+    ligne_commande = params_git + params
     try:
-        ligne_commande = params_git + params
-        if display and compute_args().debug:
-            print("debug : " + str(ligne_commande))
-        return subprocess.check_output(
-            ligne_commande, env=new_env
-        ).decode("utf-8")
-    except subprocess.CalledProcessError:
-        return ""
+        print_debug("debug : " + str(ligne_commande))
+        return subprocess.check_call(
+            ligne_commande,
+            stderr=subprocess.STDOUT,
+            stdout=subprocess.DEVNULL,
+            env=new_env,
+        )
+    except Exception as err:
+        print_debug(" /!\ error /!\ : " + str(err))
+        return 1
 
 
-def command_git_check(repo, params):
-    """
-    command git -C repo
-    return status code
-    local lang
-    no print the command
-    """
-    return command_git_check_print(repo, params, False)
-
-
-def command_git_check_print(repo, params, display):
-    """
-    command git -C repo
-    return status code
-    local lang
-    if display True, print the command
-    """
-    params_git = ["git", "-C", repo]
-    try:
-        ligne_commande = params_git + params
-        if display and compute_args().debug:
-            print("debug : " + str(ligne_commande))
-        return subprocess.check_output(ligne_commande).decode()
-    except subprocess.CalledProcessError:
-        return ""
-
-
-def command_git_call(repo, params):
-    """
-    command git -C repo
-    return the output
-    no print the command
-    local lang
-    """
-    command_git_call_print(repo, params, False)
-
-
-def command_git_call_print(repo, params, display):
-    """
-    command git -C repo
-    return the output
-    if display True print the command
-    local lang
-    """
+def git_output(repo, params):
+    new_env = dict(os.environ)
+    new_env["LC_ALL"] = "EN"
     params_git = ["git", "-C", repo]
     ligne_commande = params_git + params
-    if display and compute_args().debug:
-        print("debug : " + str(ligne_commande))
-    subprocess.call(params_git + params)
+    try:
+        print_debug("debug : " + str(ligne_commande))
+        subprocess.check_call(
+            ligne_commande,
+            stderr=subprocess.STDOUT,
+            stdout=subprocess.DEVNULL,
+            env=new_env,
+        )
+        return subprocess.check_output(
+            ligne_commande,
+            env=new_env,
+        ).decode("utf-8")
+    except Exception:
+        if compute_args().debug:
+            subprocess.call(params_git + params, env=new_env)
+        return ""

@@ -3,17 +3,14 @@
 """
 
 from termcolor import colored
-from pygitscrum.git import (
-    command_git_check_en_print,
-    command_git_check,
-)
+from pygitscrum.git import git_output, git_code
 from pygitscrum.scan import (
     absolute_path_without_git,
     print_repo_if_first,
     update_dict,
 )
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume_map
+from pygitscrum.print import print_resume_map, print_debug, print_y
 
 
 def git_prune(files):
@@ -21,17 +18,12 @@ def git_prune(files):
     entry point for --prune
     """
 
-    map_repo_with_stash = {}
     map_repo_with_gone_branches = {}
-    map_repo_with_only_local_branches = {}
+
     for repo in files:
         repo = absolute_path_without_git(repo)
-        if compute_args().debug:
-            print("debug : " + repo + " ...")
-
-        wip_stash = command_git_check(repo, ["stash", "list"])
-        # TODO aussi  git branch --format "%(refname:short) %(upstream)" pour les branches jamais poussées?
-        diff_branches = command_git_check(
+        print_debug(repo + " ... ")
+        diff_branches = git_output(
             repo,
             [
                 "for-each-ref",
@@ -40,57 +32,60 @@ def git_prune(files):
             ],
         )
 
-        diff_branches_2 = command_git_check(
-            repo,
-            [
-                "branch",
-                "--format=%(refname:short) %(upstream)",
-            ],
-        )
         first = True
-        if wip_stash != "":
-            for line in wip_stash.split("\n"):
-                if "stash" in line:
-                    if not compute_args().fast:
-                        first = print_repo_if_first(first, repo)
-                        print(colored("stash - " + line, "yellow"))
-                    map_repo_with_stash = update_dict(
-                        repo, map_repo_with_stash
-                    )
+
         if diff_branches != "":
             for line in diff_branches.split("\n"):
                 if "[gone]" in line:
+                    print_debug(line + " contains [gone] ")
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
-                        print(
-                            colored(
-                                "gone branch - " + line,
-                                "yellow",
+                        print_y("gone branch - " + line)
+                        branch = line.split(" ")[0]
+                        deleted = False
+                        if delete(branch) == "y":
+                            if git_delete(repo, branch):
+                                deleted = True
+                            else:
+                                if forcedelete(branch) == "y":
+                                    if git_force_delete(repo, branch):
+                                        deleted = True
+                        if not deleted:
+                            map_repo_with_gone_branches = update_dict(
+                                repo, map_repo_with_gone_branches
                             )
+                    else:
+                        map_repo_with_gone_branches = update_dict(
+                            repo, map_repo_with_gone_branches
                         )
-                    map_repo_with_gone_branches = update_dict(
-                        repo, map_repo_with_gone_branches
-                    )
-        if diff_branches_2 != "":
-            for line in diff_branches_2.split("\n"):
-                if not "refs/remotes" in line and line != "":
-                    if not compute_args().fast:
-                        first = print_repo_if_first(first, repo)
-                        print(
-                            colored(
-                                "local only branch - " + line,
-                                "yellow",
-                            )
-                        )
-                    map_repo_with_only_local_branches = update_dict(
-                        repo, map_repo_with_only_local_branches
-                    )
-    print_resume_map(map_repo_with_stash, "Repos with stash")
+
     print_resume_map(
         map_repo_with_gone_branches,
         "Repos with gone branches",
     )
-    print_resume_map(
-        map_repo_with_only_local_branches,
-        "Repos with local only branches ",
+
+
+def forcedelete(branch_local):
+    answer = input(
+        "do you want try to FORCE delete the branch "
+        + branch_local
+        + " (y/N) ? "
     )
+    return answer
+
+
+def delete(branch_local):
+    answer = input(
+        "do you want try to delete the branch "
+        + branch_local
+        + " (y/N) ? "
+    )
+    return answer
+
+
+def git_delete(repo, branch):
+    return git_code(repo, ["branch", "-d", branch]) == 0
+
+
+def git_force_delete(repo, branch):
+    return git_code(repo, ["branch", "-D", branch]) == 0

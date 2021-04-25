@@ -4,9 +4,14 @@
 
 from termcolor import colored
 from pygitscrum.scan import absolute_path_without_git, update_dict
-from pygitscrum.print import print_resume_map
+from pygitscrum.print import (
+    print_resume_map,
+    print_debug,
+    print_g,
+    print_y,
+)
 from pygitscrum.git import (
-    command_git_check,
+    git_output,
 )
 from pygitscrum.args import compute_args
 
@@ -19,8 +24,9 @@ def git_search(files):
     dict_repo_with_commits = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
+        print_debug(repo + " ... ")
         first = True
-        log = command_git_check(
+        log = git_output(
             repo,
             [
                 "--no-pager",
@@ -35,11 +41,12 @@ def git_search(files):
         if log != "":
             for line_log in log.split("\n"):
                 if keyword in line_log.lower():
+                    print_debug(line_log + "contains " + keyword)
                     if not compute_args().fast:
                         if first:
-                            print(colored(repo, "green"))
+                            print_g(repo)
                             first = False
-                        print(colored(line_log.strip(), "yellow"))
+                        print_y(line_log.strip())
                     dict_repo_with_commits = update_dict(
                         repo, dict_repo_with_commits
                     )

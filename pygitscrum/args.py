@@ -53,6 +53,14 @@ def compute_args():
         help="search in logs 'keyword' from all branches in your local repository",
     )
     my_group.add_argument(
+        "-S",
+        "--show",
+        metavar="id",
+        action="store",
+        type=str,
+        help="show id",
+    )
+    my_group.add_argument(
         "-c",
         "--check",
         action="store_true",
@@ -62,19 +70,19 @@ def compute_args():
         "-w",
         "--wip",
         action="store_true",
-        help="print local branches with push available, stashes, and number of untracked/unstaged/uncommited files",
+        help="display local only branches, local branches with push available, stashes, and number of untracked/unstaged/uncommited files",
     )
     my_group.add_argument(
         "-p",
         "--prune",
         action="store_true",
-        help="print stashes, and local branches with gone tracking branches",
+        help="display local branches with gone tracking branches and for each of them, ask for the deletion",
     )
     my_group.add_argument(
         "-t",
         "--track",
         action="store_true",
-        help="create the missing local branches from the tracking branches",
+        help="create missing local branches from the tracking branches",
     )
     my_group.add_argument(
         "-f",

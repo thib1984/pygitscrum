@@ -2,13 +2,9 @@
 --track scripts
 """
 
-from pygitscrum.git import (
-    command_git_check_en,
-    command_git_check_en_print,
-)
+from pygitscrum.git import git_output, git_code
 from pygitscrum.scan import absolute_path_without_git
-from pygitscrum.args import compute_args
-from termcolor import colored
+from pygitscrum.print import print_debug
 
 
 def git_track(files):
@@ -18,16 +14,13 @@ def git_track(files):
 
     for repo in files:
         repo = absolute_path_without_git(repo)
-        if compute_args().debug:
-            print("debug : " + repo + " ...")
+        print_debug(repo + " ... ")
 
         ############################################
         # ADD NEW ORGIN BRANCHS
         ############################################
-        remote_tracking_branches = command_git_check_en(
-            repo, ["branch", "-r"]
-        )
-        local_branches = command_git_check_en(repo, ["branch", "-vv"])
+        remote_tracking_branches = git_output(repo, ["branch", "-r"])
+        local_branches = git_output(repo, ["branch", "-vv"])
 
         for line_remote_branche in remote_tracking_branches.split(
             "\n"
@@ -47,7 +40,12 @@ def git_track(files):
                 remote_branch_to_track = line_remote_branche.strip(
                     " "
                 )
-                command_git_check_en_print(
+                print_debug(
+                    "the branch "
+                    + remote_branch_to_track
+                    + " does not exist in local"
+                )
+                git_code(
                     repo,
                     [
                         "branch",
@@ -55,5 +53,4 @@ def git_track(files):
                         new_local_tracking_branche,
                         remote_branch_to_track,
                     ],
-                    True,
                 )

@@ -3,6 +3,7 @@ print scripts
 """
 
 from termcolor import colored
+from pygitscrum.args import compute_args
 
 
 def print_resume_list(list_to_print, message):
@@ -58,3 +59,16 @@ def print_resume_map(dict_to_print, message):
                 "green",
             )
         )
+
+
+def print_debug(message):
+    if compute_args().debug:
+        print("debug : " + message)
+
+
+def print_y(message):
+    print(colored(message, "yellow"))
+
+
+def print_g(message):
+    print(colored(message, "green"))
