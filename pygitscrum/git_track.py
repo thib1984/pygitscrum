@@ -3,8 +3,11 @@
 """
 
 from pygitscrum.git import git_output, git_code
-from pygitscrum.scan import absolute_path_without_git
-from pygitscrum.print import print_debug
+from pygitscrum.scan import (
+    absolute_path_without_git,
+    print_repo_if_first,
+)
+from pygitscrum.print import print_debug, print_g
 
 
 def git_track(files):
@@ -21,7 +24,7 @@ def git_track(files):
         ############################################
         remote_tracking_branches = git_output(repo, ["branch", "-r"])
         local_branches = git_output(repo, ["branch", "-vv"])
-
+        first = True
         for line_remote_branche in remote_tracking_branches.split(
             "\n"
         ):
@@ -32,6 +35,7 @@ def git_track(files):
                 and line_remote_branche.split()[0]
                 not in local_branches
             ):
+                first = print_repo_if_first(first, repo)
                 new_local_tracking_branche = (
                     line_remote_branche.replace(
                         "origin/", "", 1
