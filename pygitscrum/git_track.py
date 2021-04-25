@@ -15,29 +15,11 @@ def git_track(files):
     """
     entry point for --track
     """
-    print(
-        colored(
-            "/!\ If you accept the launch, you will update, PRUNE and fetch the refs branches in your system",
-            "red",
-        )
-    )
-    answer = input("Do you confirm (Y/n) ? ")
-    if not (answer.lower() == "" or answer.lower() == "y"):
-        print(colored("Cancelled operation", "green"))
-        exit(1)
+
     for repo in files:
         repo = absolute_path_without_git(repo)
         if compute_args().debug:
             print("debug : " + repo + " ...")
-
-        ############################################
-        # UPDATE + PRUNE + FETCH
-        ############################################
-        command_git_check_en_print(repo, ["remote", "update"], True)
-        command_git_check_en_print(
-            repo, ["remote", "update", "--prune"], True
-        )
-        command_git_check_en_print(repo, ["fetch", "--all"], True)
 
         ############################################
         # ADD NEW ORGIN BRANCHS
@@ -50,6 +32,8 @@ def git_track(files):
         for line_remote_branche in remote_tracking_branches.split(
             "\n"
         ):
+            print(line_remote_branche)
+            print(local_branches)
             # pas de ligne vide, pas de HEAD
             if (
                 line_remote_branche != ""
@@ -75,9 +59,3 @@ def git_track(files):
                     ],
                     True,
                 )
-
-        ############################################
-        # UPDATE + PRUNE + FETCH
-        ############################################
-        command_git_check_en_print(repo, ["remote", "update"], True)
-        command_git_check_en_print(repo, ["fetch", "--all"], True)

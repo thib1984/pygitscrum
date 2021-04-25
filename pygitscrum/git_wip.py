@@ -33,15 +33,8 @@ def git_wip(files):
             print("debug : " + repo + " ...")
 
         ############################################
-        # UPDATE + FETCH
-        ############################################
-        command_git_check_en_print(repo, ["remote", "update"], True)
-        command_git_check_en_print(repo, ["fetch", "--all"], True)
-
-        ############################################
         # STASH + DIFF BRANCHES
         ############################################
-
         wip_stash = command_git_check(repo, ["stash", "list"])
         diff_branches = command_git_check(
             repo,

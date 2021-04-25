@@ -28,12 +28,6 @@ def git_prune(files):
         if compute_args().debug:
             print("debug : " + repo + " ...")
 
-        ############################################
-        # UPDATE REMOTE REPOSITORIES
-        ############################################
-        command_git_check_en_print(repo, ["fetch", "--all","--prune"], True)
-
-
         wip_stash = command_git_check(repo, ["stash", "list"])
         # TODO aussi  git branch --format "%(refname:short) %(upstream)" pour les branches jamais poussées?
         diff_branches = command_git_check(

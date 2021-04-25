@@ -28,7 +28,7 @@ def compute_args():
         help="full trace",
     )
     my_parser.add_argument(
-        "-f",
+        "-q",
         "--fast",
         action="store_true",
         help="skip all questions, mute off output, except the summary",
@@ -56,25 +56,31 @@ def compute_args():
         "-c",
         "--check",
         action="store_true",
-        help="fetch all tracking branches, check status of local branch, and ask you action if a pull/push is available vs the remote repository",
+        help="check status of actual local branch, and ask you action if a pull/push is available",
     )
     my_group.add_argument(
         "-w",
         "--wip",
         action="store_true",
-        help="fetch all tracking branches, print stashes, local branches with push available, and number of untracked/unstaged/uncommited files",
+        help="print local branches with push available, stashes, and number of untracked/unstaged/uncommited files",
     )
     my_group.add_argument(
         "-p",
         "--prune",
         action="store_true",
-        help="fetch all tracking branches, print stashes, and local branches with gone tracking branches",
+        help="print stashes, and local branches with gone tracking branches",
     )
     my_group.add_argument(
         "-t",
         "--track",
         action="store_true",
-        help="fetch all tracking branche and prune if not exist in remote repository, copy the new in local branches",
+        help="create the missing local branches from the tracking branches",
+    )
+    my_group.add_argument(
+        "-f",
+        "--fetch",
+        action="store_true",
+        help="fetch all tracking branches, prune if not exist in remote repository, create if not exist in tracked repository",
     )
     my_group.add_argument(
         "-V",

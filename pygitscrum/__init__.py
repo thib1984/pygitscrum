@@ -12,6 +12,7 @@ from pygitscrum.git_daily import git_daily
 from pygitscrum.git_track import git_track
 from pygitscrum.git_wip import git_wip
 from pygitscrum.git_prune import git_prune
+from pygitscrum.git_fetch import git_fetch
 
 
 def pygitscrum():
@@ -28,6 +29,8 @@ def pygitscrum():
         update_pygitscrum()
     elif args.track:
         git_track(files)
+    elif args.fetch:
+        git_fetch(files)
     elif args.check:
         git_check(files)
     elif args.daily:

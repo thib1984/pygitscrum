@@ -26,12 +26,6 @@ def git_check(files):
             print("debug : " + repo + " ...")
 
         ############################################
-        # UPDATE TRACKED REPOSITORY
-        ############################################
-        command_git_check_en_print(repo, ["fetch", "--all", "--prune"], True)
-        ############################################
-
-        ############################################
         # GIT STATUS
         ############################################
         while "Your branch is up to date" not in command_git_check_en(
