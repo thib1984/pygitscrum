@@ -65,20 +65,32 @@ def print_resume_map(dict_to_print, message):
 
 
 def print_debug(message):
+    """
+    print debug message
+    """
     if compute_args().debug:
         print("debug : " + message)
 
 
 def print_y(message):
+    """
+    print yellow message
+    """
     colorama.init()
     print(colored(message, "yellow"))
 
 
 def print_g(message):
+    """
+    print green message
+    """
     colorama.init()
     print(colored(message, "green"))
 
 
 def print_r(message):
+    """
+    print red message
+    """
     colorama.init()
     print(colored(message, "red"))

@@ -1,14 +1,13 @@
 """
 --wip scripts
 """
-from pygitscrum.git import git_code, git_code_silent, git_output
+from pygitscrum.git import git_code, git_code_silent
 from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.args import compute_args
 from pygitscrum.print import (
     print_debug,
     print_resume_list,
     print_g,
-    print_y,
 )
 
 
