@@ -23,6 +23,7 @@ def git_prune(files):
 
     map_repo_with_stash = {}
     map_repo_with_gone_branches = {}
+    map_repo_with_only_local_branches = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
         if compute_args().debug:
@@ -34,11 +35,18 @@ def git_prune(files):
             repo,
             [
                 "for-each-ref",
-                '--format="%(refname:short) %(upstream:track) (upstream:remotename)"'
+                "--format=%(refname:short) %(upstream:track) (upstream:remotename)",
                 "refs/heads",
             ],
         )
 
+        diff_branches_2 = command_git_check(
+            repo,
+            [
+                "branch",
+                "--format=%(refname:short) %(upstream)",
+            ],
+        )
         first = True
         if wip_stash != "":
             for line in wip_stash.split("\n"):
@@ -63,9 +71,26 @@ def git_prune(files):
                     map_repo_with_gone_branches = update_dict(
                         repo, map_repo_with_gone_branches
                     )
-
+        if diff_branches_2 != "":
+            for line in diff_branches_2.split("\n"):
+                if not "refs/remotes" in line and line != "":
+                    if not compute_args().fast:
+                        first = print_repo_if_first(first, repo)
+                        print(
+                            colored(
+                                "local only branch - " + line,
+                                "yellow",
+                            )
+                        )
+                    map_repo_with_only_local_branches = update_dict(
+                        repo, map_repo_with_only_local_branches
+                    )
     print_resume_map(map_repo_with_stash, "Repos with stash")
     print_resume_map(
         map_repo_with_gone_branches,
         "Repos with gone branches",
+    )
+    print_resume_map(
+        map_repo_with_only_local_branches,
+        "Repos with local only branches ",
     )

@@ -32,8 +32,6 @@ def git_track(files):
         for line_remote_branche in remote_tracking_branches.split(
             "\n"
         ):
-            print(line_remote_branche)
-            print(local_branches)
             # pas de ligne vide, pas de HEAD
             if (
                 line_remote_branche != ""
