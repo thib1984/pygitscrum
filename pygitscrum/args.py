@@ -50,7 +50,7 @@ def compute_args():
         metavar="keyword",
         action="store",
         type=str,
-        help="search in logs 'keyword' from all branches in your local repository",
+        help="search in logs 'keyword' from all branches",
     )
     my_group.add_argument(
         "-S",
@@ -64,7 +64,7 @@ def compute_args():
         "-c",
         "--check",
         action="store_true",
-        help="check status of actual local branch, and ask you action if a pull/push is available",
+        help="check status of actual local branch, and ask you action is not up to date",
     )
     my_group.add_argument(
         "-w",
