@@ -1,8 +1,6 @@
 """
 --prune scripts
 """
-
-from termcolor import colored
 from pygitscrum.git import git_output, git_code
 from pygitscrum.scan import (
     absolute_path_without_git,

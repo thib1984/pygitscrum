@@ -4,9 +4,11 @@ print scripts
 
 from termcolor import colored
 from pygitscrum.args import compute_args
+import colorama
 
 
 def print_resume_list(list_to_print, message):
+    colorama.init()
     """
     print list summary
     """
@@ -36,6 +38,7 @@ def print_resume_map(dict_to_print, message):
     """
     print dict summary
     """
+    colorama.init()
     if len(dict_to_print) > 0:
         print("")
         print(colored(message + " : ", "green"))
@@ -67,8 +70,15 @@ def print_debug(message):
 
 
 def print_y(message):
+    colorama.init()
     print(colored(message, "yellow"))
 
 
 def print_g(message):
+    colorama.init()
     print(colored(message, "green"))
+
+
+def print_r(message):
+    colorama.init()
+    print(colored(message, "red"))

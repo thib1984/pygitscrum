@@ -1,8 +1,6 @@
 """
 --daily scripts
 """
-
-from termcolor import colored
 from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.args import compute_args
 from pygitscrum.print import (

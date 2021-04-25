@@ -2,7 +2,6 @@
 --search scripts
 """
 
-from termcolor import colored
 from pygitscrum.scan import absolute_path_without_git, update_dict
 from pygitscrum.print import (
     print_resume_map,

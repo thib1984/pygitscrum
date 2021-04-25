@@ -4,8 +4,8 @@ scan anf gest repo scripts
 
 import glob
 import os
-from termcolor import colored
 from pygitscrum.args import compute_args
+from pygitscrum.print import print_r, print_g
 
 
 def scan_directories():
@@ -20,7 +20,7 @@ def scan_directories():
         and not compute_args().update
         and not compute_args().version
     ):
-        print(colored("no found local repos!", "red"))
+        print_r("no found local repos!")
     return files
 
 
@@ -37,12 +37,7 @@ def print_repo_if_first(first, repo):
     """
     if first:
         first = False
-        print(
-            colored(
-                repo,
-                "green",
-            )
-        )
+        print_g(repo)
     return first
 
 

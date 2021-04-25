@@ -1,8 +1,6 @@
 """
 --wip scripts
 """
-
-from termcolor import colored
 from pygitscrum.git import git_output
 from pygitscrum.scan import (
     absolute_path_without_git,
@@ -10,7 +8,12 @@ from pygitscrum.scan import (
     update_dict,
 )
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume_map, print_debug
+from pygitscrum.print import (
+    print_resume_map,
+    print_debug,
+    print_y,
+    print_g,
+)
 
 
 def git_wip(files):
@@ -65,12 +68,9 @@ def git_wip(files):
                     "the branch " + branch + "seems be special"
                 )
                 first = print_repo_if_first(first, repo)
-                print(
-                    colored(
-                        "/!\ branch = "
-                        + dict_repo_with_special_branches[repo],
-                        "yellow",
-                    )
+                print_y(
+                    "/!\ branch = "
+                    + dict_repo_with_special_branches[repo]
                 )
         if wip_stash != "":
             for line in wip_stash.split("\n"):
@@ -78,9 +78,7 @@ def git_wip(files):
                     print_debug("line " + line + " contains : stash")
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
-                        print(
-                            colored("wait stash - " + line, "yellow")
-                        )
+                        print_y("wait stash - " + line)
                     dict_repo_with_stash = update_dict(
                         repo, dict_repo_with_stash
                     )
@@ -94,12 +92,7 @@ def git_wip(files):
                     )
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
-                        print(
-                            colored(
-                                "wait push branch - " + line,
-                                "yellow",
-                            )
-                        )
+                        print_y("wait push branch - " + line)
                     dict_repo_with_push = update_dict(
                         repo, dict_repo_with_push
                     )
@@ -114,12 +107,7 @@ def git_wip(files):
                     )
                     if not compute_args().fast:
                         first = print_repo_if_first(first, repo)
-                        print(
-                            colored(
-                                "local only branch - " + line,
-                                "yellow",
-                            )
-                        )
+                        print_y("local only branch - " + line)
                     map_repo_with_only_local_branches = update_dict(
                         repo, map_repo_with_only_local_branches
                     )
@@ -128,12 +116,9 @@ def git_wip(files):
             print_debug("files_unstaged detected!")
             if not compute_args().fast:
                 first = print_repo_if_first(first, repo)
-                print(
-                    colored(
-                        str(len(files_unstaged.split("\n")) - 1)
-                        + " files unstaged",
-                        "yellow",
-                    )
+                print_y(
+                    str(len(files_unstaged.split("\n")) - 1)
+                    + " files unstaged"
                 )
             dict_repo_with_unstaged[repo] = (
                 len(files_unstaged.split("\n")) - 1
@@ -143,12 +128,9 @@ def git_wip(files):
             print_debug("files files_uncommited detected!")
             if not compute_args().fast:
                 first = print_repo_if_first(first, repo)
-                print(
-                    colored(
-                        str(len(files_uncommited.split("\n")) - 1)
-                        + " files uncommited",
-                        "yellow",
-                    )
+                print_y(
+                    str(len(files_uncommited.split("\n")) - 1)
+                    + " files uncommited"
                 )
             dict_repo_with_uncommited[repo] = (
                 len(files_uncommited.split("\n")) - 1
@@ -158,12 +140,9 @@ def git_wip(files):
             print_debug("files untracked detected!")
             if not compute_args().fast:
                 first = print_repo_if_first(first, repo)
-                print(
-                    colored(
-                        str(len(files_untracked.split("\n")) - 1)
-                        + " files untracked",
-                        "yellow",
-                    )
+                print_y(
+                    str(len(files_untracked.split("\n")) - 1)
+                    + " files untracked"
                 )
             dict_repo_with_untracked[repo] = (
                 len(files_untracked.split("\n")) - 1
@@ -190,13 +169,8 @@ def git_wip(files):
     )
     if len(dict_repo_with_special_branches.values()) != 0:
         print("")
-        print(colored("Repos with special branches : ", "green"))
+        print_g("Repos with special branches : ")
         for key in dict_repo_with_special_branches:
-            print(
-                colored(
-                    key
-                    + " --> "
-                    + dict_repo_with_special_branches[key],
-                    "yellow",
-                )
+            print_y(
+                key + " --> " + dict_repo_with_special_branches[key]
             )

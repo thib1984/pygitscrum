@@ -11,7 +11,7 @@ setup(
     author_email="thibault.garcon@gmail.com",
     license="MIT",
     packages=["pygitscrum"],
-    install_requires=["termcolor"],
+    install_requires=["termcolor", "colorama"],
     zip_safe=False,
     entry_points={
         "console_scripts": [

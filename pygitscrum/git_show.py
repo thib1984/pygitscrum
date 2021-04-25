@@ -1,8 +1,6 @@
 """
 --wip scripts
 """
-
-from termcolor import colored
 from pygitscrum.git import git_code, git_code_silent, git_output
 from pygitscrum.scan import absolute_path_without_git
 from pygitscrum.args import compute_args
@@ -22,7 +20,6 @@ def git_show(files):
     for repo in files:
         repo = absolute_path_without_git(repo)
         print_debug(repo + " ... ")
-        nc = "--no-color"
         item = compute_args().show
         if (
             git_code_silent(
@@ -46,7 +43,6 @@ def git_show(files):
                         repo,
                         [
                             "show",
-                            nc,
                             item,
                         ],
                     )

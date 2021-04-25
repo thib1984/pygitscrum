@@ -1,8 +1,6 @@
 """
 --check scripts
 """
-
-from termcolor import colored
 from pygitscrum.git import git_code, git_output
 from pygitscrum.args import compute_args
 from pygitscrum.scan import absolute_path_without_git
@@ -35,17 +33,16 @@ def git_check(files):
             hfh = "HEAD..FETCH_HEAD"
             fhh = "FETCH_HEAD..HEAD"
             no = "--name-only"
-            nc = "--no-color"
             if answer == "p":
                 git_code(repo, ["pull"])
             elif answer == "P":
                 git_code(repo, ["push"])
             elif answer == "S":
-                git_code(repo, ["log", "-p", nc, hfh])
-                git_code(repo, ["log", "-p", nc, fhh])
+                git_code(repo, ["log", "-p", hfh])
+                git_code(repo, ["log", "-p", fhh])
             elif answer == "s":
-                git_code(repo, ["log", "-p", no, nc, hfh])
-                git_code(repo, ["log", "-p", no, nc, fhh])
+                git_code(repo, ["log", "-p", no, hfh])
+                git_code(repo, ["log", "-p", no, fhh])
             else:
                 files_to_work.append(repo)
                 break
