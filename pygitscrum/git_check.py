@@ -17,6 +17,9 @@ def git_check(files):
     entry point for --check
     """
     files_to_work = []
+    print_g("Job --check started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     for repo in files:
         repo = absolute_path_without_git(repo)
         print_debug(repo + " ... ")
@@ -49,3 +52,8 @@ def git_check(files):
 
     ############################################
     print_resume_list(files_to_work, "Repos with pull/push available")
+    print("")
+    if len(files_to_work) == 0:
+        print_g("ALL IS OK, GOOD JOB!")
+        print("")
+    print_g("Job finished")

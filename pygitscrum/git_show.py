@@ -15,6 +15,9 @@ def git_show(files):
     """
     entry point for --wip
     """
+    print_g("Job --show started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     files_to_work = []
     for repo in files:
         repo = absolute_path_without_git(repo)
@@ -50,3 +53,8 @@ def git_show(files):
 
     ############################################
     print_resume_list(files_to_work, "Repos with given object")
+    print("")
+    if len(files_to_work) == 0:
+        print_g("No objects found...")
+        print("")
+    print_g("Job finished")

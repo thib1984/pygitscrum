@@ -19,6 +19,9 @@ def git_search(files):
     """
     entry point for --search
     """
+    print_g("Job --search started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     keyword = compute_args().search.lower()
     dict_repo_with_commits = {}
     for repo in files:
@@ -53,3 +56,8 @@ def git_search(files):
     print_resume_map(
         dict_repo_with_commits, "repos avec commits trouves"
     )
+    print("")
+    if len(dict_repo_with_commits) == 0:
+        print_y("No commits found...")
+        print("")
+    print_g("Job finished")

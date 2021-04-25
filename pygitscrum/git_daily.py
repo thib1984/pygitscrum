@@ -18,6 +18,9 @@ def git_daily(files):
     """
     entry point for --daily
     """
+    print_g("Job --daily started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     since = compute_args().daily
     dict_repo_with_commits = {}
     for repo in files:
@@ -46,3 +49,8 @@ def git_daily(files):
             dict_repo_with_commits[repo] = log.count("\n")
 
     print_resume_map(dict_repo_with_commits, "Repos commits")
+    print("")
+    if len(dict_repo_with_commits) == 0:
+        print_y("No commits found...")
+        print("")
+    print_g("Job finished")

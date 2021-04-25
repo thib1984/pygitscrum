@@ -8,14 +8,21 @@ from pygitscrum.scan import (
     update_dict,
 )
 from pygitscrum.args import compute_args
-from pygitscrum.print import print_resume_map, print_debug, print_y
+from pygitscrum.print import (
+    print_resume_map,
+    print_debug,
+    print_y,
+    print_g,
+)
 
 
 def git_prune(files):
     """
     entry point for --prune
     """
-
+    print_g("Job --prune started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     map_repo_with_gone_branches = {}
 
     for repo in files:
@@ -61,6 +68,11 @@ def git_prune(files):
         map_repo_with_gone_branches,
         "Repos with gone branches",
     )
+    print("")
+    if len(map_repo_with_gone_branches) == 0:
+        print_g("No (remaining) gone branch found")
+        print("")
+    print_g("Job finished")
 
 
 def forcedelete(branch_local):

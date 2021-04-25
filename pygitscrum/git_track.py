@@ -14,7 +14,9 @@ def git_track(files):
     """
     entry point for --track
     """
-
+    print_g("Job --track started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     for repo in files:
         repo = absolute_path_without_git(repo)
         print_debug(repo + " ... ")
@@ -58,3 +60,5 @@ def git_track(files):
                         remote_branch_to_track,
                     ],
                 )
+    print("")
+    print_g("Job finished")

@@ -20,6 +20,9 @@ def git_wip(files):
     """
     entry point for --wip
     """
+    print_g("Job --wip started")
+    print_g("git repos found : " + str(len(files)))
+    print_g("running...")
     dict_repo_with_stash = {}
     dict_repo_with_push = {}
     dict_repo_with_uncommited = {}
@@ -174,3 +177,15 @@ def git_wip(files):
             print_y(
                 key + " --> " + dict_repo_with_special_branches[key]
             )
+    print("")
+    if (
+        len(dict_repo_with_push) == 0
+        and len(dict_repo_with_special_branches) == 0
+        and len(dict_repo_with_stash) == 0
+        and len(dict_repo_with_uncommited) == 0
+        and len(dict_repo_with_unstaged) == 0
+        and len(dict_repo_with_untracked) == 0
+    ):
+        print_g("ALL IS OK, GOOD JOB!")
+        print("")
+    print_g("Job finished")
