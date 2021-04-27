@@ -22,7 +22,7 @@ def git_search(files):
     print_g("Job --search started")
     print_g("git repos found : " + str(len(files)))
     print_g("running...")
-    keyword = compute_args().search.lower()
+    keys = compute_args().search
     dict_repo_with_commits = {}
     for repo in files:
         repo = absolute_path_without_git(repo)
@@ -42,7 +42,11 @@ def git_search(files):
         )
         if log != "":
             for line_log in log.split("\n"):
-                if keyword in line_log.lower():
+                full_find=True
+                for keyword in keys:
+                    if not keyword.lower() in line_log.lower():
+                        full_find=False
+                if full_find:
                     print_debug(line_log + "contains " + keyword)
                     if not compute_args().fast:
                         if first:

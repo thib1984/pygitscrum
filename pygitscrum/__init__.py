@@ -14,6 +14,7 @@ from pygitscrum.git_wip import git_wip
 from pygitscrum.git_prune import git_prune
 from pygitscrum.git_fetch import git_fetch
 from pygitscrum.git_show import git_show
+import colorama
 
 
 def pygitscrum():
@@ -21,7 +22,7 @@ def pygitscrum():
     pygitscrum entry point
     """
     args = compute_args()
-
+    colorama.init()
     if args.version:
         version_pygitscrum()
     elif args.update:

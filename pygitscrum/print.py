@@ -8,7 +8,6 @@ import colorama
 
 
 def print_resume_list(list_to_print, message):
-    colorama.init()
     """
     print list summary
     """
@@ -38,7 +37,6 @@ def print_resume_map(dict_to_print, message):
     """
     print dict summary
     """
-    colorama.init()
     if len(dict_to_print) > 0:
         print("")
         print(colored(message + " : ", "green"))
@@ -76,7 +74,6 @@ def print_y(message):
     """
     print yellow message
     """
-    colorama.init()
     print(colored(message, "yellow"))
 
 
@@ -84,7 +81,6 @@ def print_g(message):
     """
     print green message
     """
-    colorama.init()
     print(colored(message, "green"))
 
 
@@ -92,5 +88,4 @@ def print_r(message):
     """
     print red message
     """
-    colorama.init()
     print(colored(message, "red"))

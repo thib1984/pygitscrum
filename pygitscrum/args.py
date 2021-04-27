@@ -50,6 +50,7 @@ def compute_args():
         metavar="keyword",
         action="store",
         type=str,
+        nargs="+", 
         help="search in logs 'keyword' from all branches",
     )
     my_group.add_argument(
