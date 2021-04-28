@@ -42,7 +42,7 @@ def git_wip(files):
             repo,
             [
                 "for-each-ref",
-                '--format="%(refname:short) %(upstream:track) (upstream:remotename)"'
+                '--format=%(refname:short) %(upstream:track) (upstream:remotename)'
                 "refs/heads",
             ],
         )
