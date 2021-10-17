@@ -2,7 +2,10 @@
 
 ## Description
 
-With pygitscrum you can masterize few git actions.
+With pygitscrum you can masterize few git actions.!
+
+[demo](https://user-images.githubusercontent.com/45128847/137621613-bcc27ec7-8682-41f3-8762-052ba27cd8df.gif)
+
 
 ## Installation prerequisites
 
