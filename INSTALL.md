@@ -8,8 +8,6 @@
 
 ``pip3 install pygitscrum``*
 
-*_Use pip instead of pip3, if pip3 does not exist_
-
 # Upgrade
 
 ``pygitscrum -u``
