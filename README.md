@@ -1,4 +1,4 @@
-# pygitscrum
+# :rabbit: pygitscrum
 
 With pygitscrum you can masterize few git actions.!
 
@@ -7,9 +7,7 @@ With pygitscrum you can masterize few git actions.!
 ![demo_git](https://user-images.githubusercontent.com/45128847/137622385-fc899954-223c-4e14-9b4e-9f60492eb293.gif)
 # 🚀 How use **pygitscrum**
 
-Just :
-
-``pygitscrum`` to see the help message
+Just ``pygitscrum`` to see all available commands !
 
 # ⚙️ Prerequisites, Installation, Upgrade 
 
@@ -32,3 +30,13 @@ Just :
 
 *_Use pip instead of pip3, if pip3 does not exist_
 
+# :construction_worker: Contribution
+
+```
+git clone https://github.com/thib1984/pygitscrum.git
+cd pygitscrum 
+#work!
+pip3 install . #to build
+pygitscrum [..] #to retest
+pip3 uninstall pygitscrum #to properly uninstall the dev version
+``` 
