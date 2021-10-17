@@ -26,9 +26,7 @@ Just ``pygitscrum`` to see all available commands !
 
 ## Upgrade
 
-``pip3 install --upgrade pygitscrum``*
-
-*_Use pip instead of pip3, if pip3 does not exist_
+``pygitscrum -u``
 
 # :construction_worker: Contribution
 
