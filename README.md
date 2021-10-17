@@ -12,6 +12,7 @@ Just run ``pygitscrum`` to see all available commands !
 # ⚙️ Install
 
 See [this page](INSTALL.md)
+
 # :construction_worker: Contribution
 
 See [this page](CONTRIBUTING.md)
