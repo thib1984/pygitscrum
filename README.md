@@ -1,12 +1,19 @@
 # pygitscrum
 
-## Description
-
 With pygitscrum you can masterize few git actions.!
 
-![demo_git](https://user-images.githubusercontent.com/45128847/137622385-fc899954-223c-4e14-9b4e-9f60492eb293.gif)
+# 💫 Demo
 
-## Installation prerequisites
+![demo_git](https://user-images.githubusercontent.com/45128847/137622385-fc899954-223c-4e14-9b4e-9f60492eb293.gif)
+# 🚀 How use **pygitscrum**
+
+Just :
+
+``pygitscrum`` to see the help message
+
+# ⚙️ Prerequisites, Installation, Upgrade 
+
+## Prerequisites
 
 - Install Python 3 for your system
 - Install pip3* for your system
@@ -25,8 +32,3 @@ With pygitscrum you can masterize few git actions.!
 
 *_Use pip instead of pip3, if pip3 does not exist_
 
-## Use
-
-Just :
-
-``pygitscrum`` to see the help message
