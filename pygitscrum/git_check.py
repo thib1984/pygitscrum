@@ -41,11 +41,19 @@ def git_check(files):
             elif answer == "P":
                 git_code(repo, ["push"])
             elif answer == "S":
-                git_code(repo, ["log", "-p", hfh])
-                git_code(repo, ["log", "-p", fhh])
+                if compute_args().nocolor:
+                    git_code(repo, ["log", "-no-color", "-p", hfh])
+                    git_code(repo, ["log", "-no-color", "-p", fhh])
+                else:
+                    git_code(repo, ["log", "-p", hfh])
+                    git_code(repo, ["log", "-p", fhh])                        
             elif answer == "s":
-                git_code(repo, ["log", "-p", no, hfh])
-                git_code(repo, ["log", "-p", no, fhh])
+                if compute_args().nocolor:
+                    git_code(repo, ["log", "-no-color", "-p", no, hfh])
+                    git_code(repo, ["log", "-no-color", "-p", no, fhh])
+                else: 
+                    git_code(repo, ["log", "-p", no, hfh])
+                    git_code(repo, ["log", "-p", no, fhh])                       
             else:
                 files_to_work.append(repo)
                 break
