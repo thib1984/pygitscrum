@@ -28,6 +28,12 @@ def compute_args():
         help="full trace",
     )
     my_parser.add_argument(
+        "-n",
+        "--nocolor",
+        action="store_true",
+        help="disable colors in sysout",
+    )
+    my_parser.add_argument(
         "-q",
         "--fast",
         action="store_true",
@@ -73,6 +79,7 @@ def compute_args():
         action="store_true",
         help="display local only branches, local branches with push available, stashes, and number of untracked/unstaged/uncommited files",
     )
+
     my_group.add_argument(
         "-p",
         "--prune",

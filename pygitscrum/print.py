@@ -14,19 +14,19 @@ def print_resume_list(list_to_print, message):
     if len(list_to_print) > 0:
         print("")
         print(
-            colored(
+            my_colored(
                 message + " : ",
                 "green",
             )
         )
         print(
-            colored(
+            my_colored(
                 "\n".join(map(str, list_to_print)),
                 "yellow",
             )
         )
         print(
-            colored(
+            my_colored(
                 "total : " + str(len(list_to_print)),
                 "green",
             )
@@ -39,10 +39,10 @@ def print_resume_map(dict_to_print, message):
     """
     if len(dict_to_print) > 0:
         print("")
-        print(colored(message + " : ", "green"))
+        print(my_colored(message + " : ", "green"))
         for key in dict_to_print:
             print(
-                colored(
+                my_colored(
                     key
                     + " --> "
                     + str(dict_to_print[key])
@@ -51,7 +51,7 @@ def print_resume_map(dict_to_print, message):
                 )
             )
         print(
-            colored(
+            my_colored(
                 "total : "
                 + str(len(dict_to_print))
                 + " --> "
@@ -74,18 +74,23 @@ def print_y(message):
     """
     print yellow message
     """
-    print(colored(message, "yellow"))
+    print(my_colored(message, "yellow"))
 
 
 def print_g(message):
     """
     print green message
     """
-    print(colored(message, "green"))
+    print(my_colored(message, "green"))
 
 
 def print_r(message):
     """
     print red message
     """
-    print(colored(message, "red"))
+    print(my_colored(message, "red"))
+
+def my_colored(message,color):
+    if compute_args().nocolor:
+        return message
+    return colored(message, color)       
