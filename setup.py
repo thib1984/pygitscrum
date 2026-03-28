@@ -10,6 +10,7 @@ setup(
     author="thib1984",
     author_email="thibault.garcon@gmail.com",
     license="MIT",
+    license_files=[],
     packages=["pygitscrum"],
     install_requires=["termcolor", "colorama"],
     zip_safe=False,
