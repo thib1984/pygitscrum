@@ -5,6 +5,7 @@ With pygitscrum you can masterize few git actions.!
 # 💫 Demo
 
 ![demo_git](https://user-images.githubusercontent.com/45128847/137622385-fc899954-223c-4e14-9b4e-9f60492eb293.gif)
+
 # 🚀 How use **pygitscrum**
 
 Just run ``pygitscrum`` to see all available commands !

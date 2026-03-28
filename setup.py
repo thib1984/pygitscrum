@@ -3,14 +3,14 @@ from setuptools import setup
 
 setup(
     name="pygitscrum",
-    version="1.0.0",
+    version="1.0.1",
     description="pygitscrum",
     long_description="The complete description/installation/use/FAQ is available at : https://github.com/thib1984/pygitscrum#readme",
     url="https://github.com/thib1984/pygitscrum",
     author="thib1984",
     author_email="thibault.garcon@gmail.com",
     license="MIT",
-    license_files=[],
+    license_files=["LICENSE.txt",],
     packages=["pygitscrum"],
     install_requires=["termcolor", "colorama"],
     zip_safe=False,
@@ -20,8 +20,6 @@ setup(
         ],
     },
     classifiers=[
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -30,5 +28,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.10",
 )
