@@ -10,7 +10,7 @@ setup(
     author="thib1984",
     author_email="thibault.garcon@gmail.com",
     license="MIT",
-    license_files=["LICENSE.txt",],
+    license_files="LICENSE.txt",
     packages=["pygitscrum"],
     install_requires=["termcolor", "colorama"],
     zip_safe=False,
@@ -19,14 +19,10 @@ setup(
             "pygitscrum=pygitscrum.__init__:pygitscrum"
         ],
     },
-    classifiers=[
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-        "Programming Language :: Python :: 3.14",        
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    python_requires=">=3.10",
+classifiers=[
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+],
+python_requires=">=3.10",
 )
