@@ -19,10 +19,10 @@ setup(
             "pygitscrum=pygitscrum.__init__:pygitscrum"
         ],
     },
-classifiers=[
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-],
-python_requires=">=3.10",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.10",
 )
