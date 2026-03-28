@@ -4,7 +4,6 @@ pygitscrum init
 
 from pygitscrum.args import compute_args
 from pygitscrum.scan import scan_directories
-from pygitscrum.update import update_pygitscrum
 from pygitscrum.version import version_pygitscrum
 from pygitscrum.git_search import git_search
 from pygitscrum.git_check import git_check
@@ -25,8 +24,6 @@ def pygitscrum():
     colorama.init()
     if args.version:
         version_pygitscrum()
-    elif args.update:
-        update_pygitscrum()
     elif args.track:
         git_track(scan_directories())
     elif args.fetch:

@@ -17,7 +17,6 @@ def scan_directories():
     files.sort()
     if (
         len(files) == 0
-        and not compute_args().update
         and not compute_args().version
     ):
         print_r("no found local repos!")

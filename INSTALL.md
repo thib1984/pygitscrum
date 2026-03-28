@@ -1,20 +1,17 @@
 # Prerequisites
 
 - Install Python 3 for your system
-- Install pip3* for your system
+- Install pipx for your system
 - Install git for your system
 
 # Installation
 
-``pip3 install pygitscrum``*
+``pipx install pygitscrum``
 
 # Upgrade
 
-``pygitscrum -u``
+``pipx upgrade pygitscrum``
 
-or
+# Uninstall
 
-``pip3 install --upgrade pygitscrum``*
-
-
-*_Install pip instead of pip3, if pip3 does not exist for your OS_
+``pipx uninstall pygitscrum``

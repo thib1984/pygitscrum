@@ -104,12 +104,6 @@ def compute_args():
         action="store_true",
         help="display pygitscrum's version",
     )
-    my_group.add_argument(
-        "-u",
-        "--update",
-        action="store_true",
-        help="update pygitscrum",
-    )
 
     my_parser.add_argument(
         "to_path",

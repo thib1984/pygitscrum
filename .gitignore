@@ -3,4 +3,5 @@ dist
 pygitscrum.egg-info
 .vscode
 venv
+pygitscrum_env
 

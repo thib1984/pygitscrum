@@ -2,8 +2,7 @@
 --version scripts
 """
 
-import pkg_resources
-
+from importlib.metadata import version
 
 def version_pygitscrum():
     """
@@ -11,5 +10,5 @@ def version_pygitscrum():
     """
     print(
         "version pygitscrum : "
-        + pkg_resources.get_distribution("pygitscrum").version
+        + version("pygitscrum")
     )
