@@ -1,18 +1,54 @@
+# 🙏 Thanks !
+
+Oh if you open this page, it's for contributing for this project, great ! A big thanks 🙏
+
+To contribute, it's simple, check the [existing issues](https://github.com/thib1984/pygitscrum/issues). If you see an issue you are interested to work, please let a message and i assign you the task. With this, all people know you are working on this issue.
+
+If it's a new subject, don't hesitate to create an issue. I will check this one to affect some labels and let contribution open 😉
+
+You can initialize a draft merge request directly when you start to work on an issue.
+
+When you finish, past the merge request in "ready" mode and i will check this quickly.
+
+If you are any questions, don't try to ping me 😁
+
 # Work
 
 ```
-pipx uninstall pygitscrum #if necessary 
+# Uninstall the globally installed version via pipx if needed (optional, just to reset the published app)
+pipx uninstall pygitscrum 
+
+# Clone the repository only the first time
 git clone https://github.com/thib1984/pygitscrum.git
+# Afterwards, update it using regular git commands (git pull, git fetch, etc.)
 cd pygitscrum 
-rm -rf pygitscrum_env #clean env if necessary
+
+# Remove any previous virtual environment to start fresh
+rm -rf pygitscrum_env 
+
+# Create a virtual environment to isolate dependencies for this project
 python3 -m venv pygitscrum_env
 source pygitscrum_env/bin/activate
-#work!
+
+# Install the local package in the isolated environment
 pip install .
-pygitscrum [...] #to retest
+
+# Test the app locally within the virtual environment
+pygitscrum [...] 
+
+# Optional: reinstall if needed and retest
+pip install .
+pygitscrum [...] 
+
+# Exit the virtual environment
 deactivate
-pipx install pygitscrum #if necessary 
+
+# Reinstall the globally published version via pipx if needed
+pipx install pygitscrum 
 ``` 
+
+A venv (virtual environment) isolates this project's Python dependencies from the system, preventing version conflicts and keeping things clean.
+
 
 # Publish to pypi
 
