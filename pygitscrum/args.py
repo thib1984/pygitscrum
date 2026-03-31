@@ -4,6 +4,18 @@ pygitscrum argparse gestion
 
 import argparse
 import sys
+import importlib.metadata
+
+def get_env_report():
+    lines = []
+
+    lines.append("\nInstalled packages:")
+    for dist in sorted(importlib.metadata.distributions(), key=lambda d: d.metadata["Name"].lower()):
+        name = dist.metadata["Name"]
+        version = dist.version
+        lines.append(f"  - {name}=={version}")
+
+    return "\n".join(lines)    
 
 
 def compute_args():
@@ -12,14 +24,29 @@ def compute_args():
     """
     my_parser = argparse.ArgumentParser(
         description="pygitscrum : masterize git!!!",
-        epilog="""
-        Full documentation at: <https://github.com/thib1984/pygitscrum>.
-        Report bugs to <https://github.com/thib1984/pygitscrum/issues>.
-        MIT Licence.
-        Copyright (c) 2021 thib1984.
-        This is free software: you are free to change and redistribute it.
-        There is NO WARRANTY, to the extent permitted by law.
-        Written by thib1984.""",
+        epilog=f"""
+To upgrade, run:
+    pipx upgrade pygitscrum
+    pipx reinstall pygitscrum #to force update dependencies
+To install, run:
+    pipx install pygitscrum
+To force reinstall, run:
+    pipx install pygitscrum --force
+To uninstall, run:
+    pipx uninstall pygitscrum
+To force uninstall (if needed), run:
+    pipx uninstall pygitscrum --force
+
+{get_env_report()}
+
+Full documentation at: <https://github.com/thib1984/pygitscrum>.
+Report bugs to <https://github.com/thib1984/pygitscrum/issues>.
+MIT Licence.
+Copyright (c) 2021 thib1984.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Written by thib1984.""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     my_parser.add_argument(
         "-v",

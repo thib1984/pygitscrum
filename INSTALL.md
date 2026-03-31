@@ -24,7 +24,8 @@ pip uninstall pygitscrum --break-system-packages
 # Installation
 
 ```
-pipx install pygitscrum
+pipx install pygitscrum #to update pygitscrum
+pipx reinstall pygitscrum #to force update dependencies
 ```
 
 # Upgrade
